@@ -1,8 +1,9 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.model.Enum;
 
 import lombok.Getter;
+import lombok.Setter;
 
-@Getter
+@Setter
 public enum SubscriptionStatus {
     WAITING_RESPONSE("PENDING"),
     REJECTED("SUBSCRIBED"),

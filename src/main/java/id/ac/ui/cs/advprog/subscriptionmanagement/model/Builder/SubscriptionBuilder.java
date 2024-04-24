@@ -20,46 +20,42 @@ public class SubscriptionBuilder {
 
     public SubscriptionBuilder reset() {
         currentSubscription = new Subscription();
-        // firstSetUp();
+        firstSetUp();
         return this;
     }
 
-    // public SubscriptionBuilder firstSetUp() {
-    //     currentSubscription.setId(UUID.randomUUID());
-    //     currentSubscription.setPaymentStatus(SubscriptionStatus.WAITING_RESPONSE.getStatus());
+    public SubscriptionBuilder firstSetUp() {
+        currentSubscription.setId(UUID.randomUUID());
+        currentSubscription.setPaymentStatus(SubscriptionStatus.WAITING_RESPONSE.getStatus());
        
-    //     return this;
-    // }
+        return this;
+    }
 
-    // public SubscriptionBuilder addPaymentStatus(String status) {
-    //     if (SubscriptionStatus.contains(status)) {
-    //         currentSubscription.setPaymentStatus(status);
-    //         return this;
-    //     }
-    //     throw new IllegalArgumentException();
-    // }
+    public SubscriptionBuilder setStatus(String status) {
+        if (SubscriptionStatus.contains(status)) {
+            currentSubscription.setStatus(status);
+            return this;
+        }
+        throw new IllegalArgumentException();
+    }
 
-    // public SubscriptionBuilder addPaymentAmount(int paymentAmount) {
-    //     currentSubscription.setPaymentAmount(paymentAmount);
-    //     return this;
-    // }
+    public SubscriptionBuilder addPaymentAmount(int paymentAmount) {
+        currentSubscription.setPaymentAmount(paymentAmount);
+        return this;
+    }
 
-    // public SubscriptionBuilder addPaymentResponseTime(long paymentResponseTime) {
-    //     currentSubscription.setPaymentResponseTime(paymentResponseTime);
-    //     return this;
-    // }
 
     // public SubscriptionBuilder addBuyerUsername(String buyerUsername) {
     //     currentSubscription.setBuyerUsername(buyerUsername);
     //     return this;
     // }
 
-    // public Subscription build() {
-    //     return currentSubscription;
-    // }
+    public Subscription build() {
+        return currentSubscription;
+    }
 
-    // public SubscriptionBuilder setCurrent(Subscription Subscription) {
-    //     currentSubscription = Subscription;
-    //     return this;
-    // }
+    public SubscriptionBuilder setCurrent(Subscription Subscription) {
+        currentSubscription = Subscription;
+        return this;
+    }
 }
