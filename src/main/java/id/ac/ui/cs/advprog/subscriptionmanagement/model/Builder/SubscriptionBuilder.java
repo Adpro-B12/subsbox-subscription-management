@@ -5,8 +5,6 @@ import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 
 import org.springframework.stereotype.Component;
 
-import java.sql.Time;
-import java.time.LocalTime;
 
 import java.util.UUID;
 
@@ -25,8 +23,18 @@ public class SubscriptionBuilder {
     }
 
     public SubscriptionBuilder firstSetUp() {
-        currentSubscription.setId(UUID.randomUUID());
+        UUID tempId = UUID.randomUUID();
+        currentSubscription.setId(tempId);
         currentSubscription.setStatus(SubscriptionStatus.PENDING.getStatus());
+
+        String subscriptionBoxType = currentSubscription.getSubscriptionBox().getType();
+        if (subscriptionBoxType.equals("MONTHLY")){
+            currentSubscription.setUniqueCode("MTH"+'-'+tempId.toString());
+        } else if (subscriptionBoxType.equals("YEARLY")){
+            currentSubscription.setUniqueCode("QTR"+'-'+tempId.toString());
+        } else {
+            currentSubscription.setUniqueCode("SAA"+'-'+tempId.toString());
+        }
        
         return this;
     }
@@ -37,11 +45,6 @@ public class SubscriptionBuilder {
             return this;
         }
         throw new IllegalArgumentException();
-    }
-
-    public SubscriptionBuilder addPaymentAmount(int paymentAmount) {
-        currentSubscription.setPaymentAmount(paymentAmount);
-        return this;
     }
 
 

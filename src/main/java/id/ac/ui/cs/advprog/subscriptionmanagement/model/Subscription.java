@@ -13,7 +13,7 @@ public class Subscription {
     private String status;
     private Date startDate;
     private Date endDate;
-    private String type;
+    private SubscriptionBox subscriptionBox;
+
 //    private User user;
-//    private SubscriptionBox subscriptionBox;
 }
