@@ -19,7 +19,13 @@ public class SubscriptionTest {
         subscriptionBox = new SubscriptionBox();
         startDate = new Date();
         endDate = new Date();
-        subscription = new Subscription("Subscribed", startDate, endDate, user, subscriptionBox);
+
+        // Menggunakan Builder Pattern untuk membuat objek Subscription
+        subscription = new Subscription.Builder("Subscribed", user, subscriptionBox)
+                .uniqueCode("MTH-123")
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
     }
 
     @Test
@@ -41,5 +47,10 @@ public class SubscriptionTest {
     @Test
     public void testSubscriptionBox() {
         assertEquals(subscriptionBox, subscription.getSubscriptionBox());
+    }
+
+    @Test
+    public void testSubscriptionUniqueCode() {
+        assertEquals("MTH-123", subscription.getUniqueCode());
     }
 }
