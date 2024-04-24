@@ -11,7 +11,7 @@ public interface SubscriptionService {
     public Subscription create(Subscription Subscription);
     public List<Subscription> findAll();
     public Subscription findById(UUID SubscriptionId);
-    public List<Subscription> findAllByBuyerUsername(String buyerUsername);
     public Subscription update(Subscription Subscription);
     public Subscription deleteSubscriptionById(UUID SubscriptionId);
+    // public List<Subscription> findAllByBuyerUsername(String buyerUsername);
 }

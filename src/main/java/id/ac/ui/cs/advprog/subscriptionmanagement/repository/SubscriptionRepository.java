@@ -18,20 +18,21 @@ public class SubscriptionRepository {
     private List<Subscription> SubscriptionList = new ArrayList();
 
     public Subscription save(Subscription Subscription) {
+
         for (int index = 0; index < SubscriptionList.size(); index++) {
             Subscription currentSubscription = SubscriptionList.get(index);
             if (currentSubscription.getId().equals(Subscription.getId())) {
                 Subscription newSubscription = SubscriptionBuilder.reset()
                         .setCurrent(Subscription)
-                        .addPaymentAmount(Subscription.getPaymentAmount())
-                        .addBuyerUsername(Subscription.getBuyerUsername()).build();
+                        .addStatus(Subscription.getStatus()).build();
+   
                 SubscriptionList.set(index, newSubscription);
                 return newSubscription;
             }
         }
+
         Subscription newSubscription = SubscriptionBuilder.reset()
-                .addPaymentAmount(Subscription.getPaymentAmount())
-                .addBuyerUsername(Subscription.getBuyerUsername()).build();
+                .addStatus(Subscription.getStatus()).build();
         SubscriptionList.add(newSubscription);
         return newSubscription;
     }
@@ -50,16 +51,7 @@ public class SubscriptionRepository {
         return SubscriptionList;
     }
 
-    public List<Subscription> findAllByBuyerUsername(String buyerUsername) {
-        List<Subscription> tempSubscriptionList = new ArrayList<>();
-        for (Subscription Subscription : SubscriptionList) {
-            if (Subscription != null && Subscription.getBuyerUsername().equals(buyerUsername)) {
-                tempSubscriptionList.add(Subscription);
-            }
-        }
-        return tempSubscriptionList;
-    }
-
+    
     public Subscription deleteById(UUID id) {
         for (int index = 0; index < SubscriptionList.size(); index++) {
             Subscription currentSubscription = SubscriptionList.get(index);
@@ -70,4 +62,13 @@ public class SubscriptionRepository {
         }
         return null;
     }
+    // public List<Subscription> findAllByBuyerUsername(String buyerUsername) {
+    //     List<Subscription> tempSubscriptionList = new ArrayList<>();
+    //     for (Subscription Subscription : SubscriptionList) {
+    //         if (Subscription != null && Subscription.getBuyerUsername().equals(buyerUsername)) {
+    //             tempSubscriptionList.add(Subscription);
+    //         }
+    //     }
+    //     return tempSubscriptionList;
+    // }
 }

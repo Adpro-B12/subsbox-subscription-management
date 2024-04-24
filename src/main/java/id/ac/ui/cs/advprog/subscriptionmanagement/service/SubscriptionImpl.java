@@ -29,16 +29,17 @@ public class SubscriptionImpl implements SubscriptionService {
     }
 
     @Override
-    public List<Subscription> findAllByBuyerUsername(String buyerUsername) {
-        return SubscriptionRepository.findAllByBuyerUsername(buyerUsername);
-    }
-
     public Subscription update(Subscription Subscription) {
         return SubscriptionRepository.save(Subscription);
     }
-
+    
+    @Override
     public Subscription deleteSubscriptionById(UUID SubscriptionId) {
         return SubscriptionRepository.deleteById(SubscriptionId);
     }
-
+    
+    // @Override
+    // public List<Subscription> findAllByBuyerUsername(String buyerUsername) {
+    //     return SubscriptionRepository.findAllByBuyerUsername(buyerUsername);
+    // }
 }
