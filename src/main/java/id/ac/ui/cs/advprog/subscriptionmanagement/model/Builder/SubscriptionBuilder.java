@@ -26,12 +26,12 @@ public class SubscriptionBuilder {
 
     public SubscriptionBuilder firstSetUp() {
         currentSubscription.setId(UUID.randomUUID());
-        currentSubscription.setPaymentStatus(SubscriptionStatus.WAITING_RESPONSE.getStatus());
+        currentSubscription.setStatus(SubscriptionStatus.PENDING.getStatus());
        
         return this;
     }
 
-    public SubscriptionBuilder setStatus(String status) {
+    public SubscriptionBuilder addStatus(String status) {
         if (SubscriptionStatus.contains(status)) {
             currentSubscription.setStatus(status);
             return this;

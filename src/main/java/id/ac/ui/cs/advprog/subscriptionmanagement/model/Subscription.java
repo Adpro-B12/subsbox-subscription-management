@@ -4,14 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter @Setter
 public class Subscription {
-    private Long id;
+    private UUID id;
     private String uniqueCode;
     private String status;
     private Date startDate;
     private Date endDate;
+    private String type;
 //    private User user;
 //    private SubscriptionBox subscriptionBox;
 }

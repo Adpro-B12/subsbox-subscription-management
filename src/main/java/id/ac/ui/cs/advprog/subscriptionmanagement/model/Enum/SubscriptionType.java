@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public enum SubscriptionStatus {
+public enum SubscriptionType {
     PENDING("PENDING"),
     SUBSCRIBED("SUBSCRIBED"),
     CANCELLED("CANCELLED");
 
     private final String status;
 
-    private SubscriptionStatus(String status) {
+    private SubscriptionType(String type) {
         this.status = status;
     }
 
