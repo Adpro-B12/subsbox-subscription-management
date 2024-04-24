@@ -12,10 +12,6 @@ public class Subscription {
     private String status;
     private Date startDate;
     private Date endDate;
-    private User user;
-    private SubscriptionBox subscriptionBox;
-
-    public Subscription(String status, Date startDate, Date endDate, User user, SubscriptionBox subscriptionBox) {
-        
-    }
+//    private User user;
+//    private SubscriptionBox subscriptionBox;
 }
