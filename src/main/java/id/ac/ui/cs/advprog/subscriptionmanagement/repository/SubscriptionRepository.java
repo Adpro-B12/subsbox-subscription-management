@@ -25,7 +25,7 @@ public class SubscriptionRepository {
                 Subscription newSubscription = SubscriptionBuilder.reset()
                         .setCurrent(Subscription)
                         .addStatus(Subscription.getStatus()).build();
-   
+
                 SubscriptionList.set(index, newSubscription);
                 return newSubscription;
             }
@@ -51,7 +51,7 @@ public class SubscriptionRepository {
         return SubscriptionList;
     }
 
-    
+
     public Subscription deleteById(UUID id) {
         for (int index = 0; index < SubscriptionList.size(); index++) {
             Subscription currentSubscription = SubscriptionList.get(index);
