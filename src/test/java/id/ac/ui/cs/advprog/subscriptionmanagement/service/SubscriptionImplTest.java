@@ -1,20 +1,17 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.service;
 
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.*;
-import id.ac.ui.cs.advprog.subscriptionmanagement.repository.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
+import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionBoxRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class SubscriptionImplTest {
 
@@ -22,45 +19,43 @@ public class SubscriptionImplTest {
     private SubscriptionBoxRepository subscriptionBoxRepository;
 
     @InjectMocks
-    private SubscriptionService subscriptionService;
-
-    private SubscriptionBox box1, box2, box3;
-
-//    @BeforeEach
-//    public void setUp() {
-//        MockitoAnnotations.initMocks(this);
-//    }
+    private SubscriptionImpl subscriptionService;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
-        box1 = new SubscriptionBox(); // Assume SubscriptionBox has a constructor to set properties
-        box1.setPrice(100);
-        box2 = new SubscriptionBox();
-        box2.setPrice(150);
-        box3 = new SubscriptionBox();
-        box3.setPrice(200);
-
-        when(subscriptionBoxRepository.findAll()).thenReturn(Arrays.asList(box1, box2, box3));
-        when(subscriptionBoxRepository.findByPriceRange(100, 150)).thenReturn(Arrays.asList(box1, box2));
     }
 
     @Test
-    void testGetAllBoxes() {
+    public void testGetAllBoxesReturnsAllBoxes() {
+        SubscriptionBox box1 = new SubscriptionBox(); // Setup test data
+        SubscriptionBox box2 = new SubscriptionBox();
+        List<SubscriptionBox> mockBoxes = Arrays.asList(box1, box2);
+
+        when(subscriptionBoxRepository.findAll()).thenReturn(mockBoxes);
+
         List<SubscriptionBox> boxes = subscriptionService.getAllBoxes();
-        assertNotNull(boxes);
-        assertEquals(3, boxes.size(), "Should retrieve all boxes");
+
+        assertEquals(2, boxes.size());
         verify(subscriptionBoxRepository).findAll();
     }
 
     @Test
-    void testGetFilteredBoxesByPrice() {
-        List<SubscriptionBox> filteredBoxes = subscriptionService.getFilteredBoxesByPrice(100, 150);
-        assertNotNull(filteredBoxes);
-        assertEquals(2, filteredBoxes.size(), "Should retrieve boxes within the price range");
-        assertTrue(filteredBoxes.contains(box1) && filteredBoxes.contains(box2), "Should only contain box1 and box2");
-        verify(subscriptionBoxRepository).findByPriceRange(100, 150);
+    public void testGetFilteredBoxesByPriceReturnsFilteredBoxes() {
+        SubscriptionBox box1 = new SubscriptionBox(); // Assume setters to set prices
+        box1.setPrice(100);
+        SubscriptionBox box2 = new SubscriptionBox();
+        box2.setPrice(200);
+        List<SubscriptionBox> mockBoxes = Arrays.asList(box1, box2);
+
+        when(subscriptionBoxRepository.findByPriceBetween(100, 200)).thenReturn(mockBoxes);
+
+        List<SubscriptionBox> filteredBoxes = subscriptionService.getFilteredBoxesByPrice(100, 200);
+
+        assertEquals(2, filteredBoxes.size());
+        verify(subscriptionBoxRepository).findByPriceBetween(100, 200);
     }
+}
 //    @Test
 //    public void testCreateSubscription() {
 //        Subscription subscription = new Subscription();
@@ -148,5 +143,5 @@ public class SubscriptionImplTest {
 //
 //        assertNull(deletedSubscription);
 //    }
-
-}
+//
+//}
