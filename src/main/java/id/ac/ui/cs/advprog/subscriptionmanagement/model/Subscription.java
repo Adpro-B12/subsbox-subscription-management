@@ -19,7 +19,7 @@ public class Subscription {
     private String status;
     private Date startDate;
     private Date endDate;
-    private Long subscriptionBoxId;
 
-//    private User user;
+    private Long subscriptionBoxId;
+    private String username;
 }

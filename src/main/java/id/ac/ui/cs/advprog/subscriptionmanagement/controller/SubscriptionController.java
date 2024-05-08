@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +31,17 @@ public class SubscriptionController {
             @RequestParam(required = false) int maxPrice) {
         List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice);
         return new ResponseEntity<>(boxes, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/subscribe")
+    public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+        try {
+            String username = requestBody.get("username");
+            Subscription subscription = subscriptionService.createSubscription(id, username);
+            return ResponseEntity.ok(subscription);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 //    @GetMapping("/{id}")

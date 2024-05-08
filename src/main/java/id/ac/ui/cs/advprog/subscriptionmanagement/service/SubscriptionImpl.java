@@ -36,4 +36,13 @@ public class SubscriptionImpl implements SubscriptionService {
         return SubscriptionBoxRepository.findByNameContaining(name);
     }
 
+    @Override
+    public Subscription createSubscription(Long BoxId, String buyerUsername) {
+        return SubscriptionBuilder.reset()
+                .addIdBox(BoxId)
+                .addUniqueCode()
+                .addBuyerUsername(buyerUsername)
+                .build();
+    }
+
 }

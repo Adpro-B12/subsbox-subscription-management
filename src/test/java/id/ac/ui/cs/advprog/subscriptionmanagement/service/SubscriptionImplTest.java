@@ -72,7 +72,7 @@ public class SubscriptionImplTest {
         when(subscriptionBuilder.addBuyerUsername(buyerUsername)).thenReturn(subscriptionBuilder);
         when(subscriptionBuilder.build()).thenReturn(mockSubscription);
 
-        Subscription subscription = subscriptionService.create(boxId, buyerUsername);
+        Subscription subscription = subscriptionService.createSubscription(boxId, buyerUsername);
 
         verify(subscriptionBuilder).reset();
         verify(subscriptionBuilder).addIdBox(boxId);

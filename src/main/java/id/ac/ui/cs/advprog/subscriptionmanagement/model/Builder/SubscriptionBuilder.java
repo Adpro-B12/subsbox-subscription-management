@@ -21,43 +21,16 @@ public class SubscriptionBuilder {
         this.reset();
     }
 
-    public void reset() {
+    public SubscriptionBuilder reset() {
         currentSubscription = new Subscription();
         firstSetUp();
+        return this;
     }
 
-    public void firstSetUp() {
-        UUID tempId = UUID.randomUUID();
+    public SubscriptionBuilder firstSetUp() {
 
         currentSubscription.setStatus(SubscriptionStatus.PENDING.getStatus());
-
-        Date startDate = new Date();
-        currentSubscription.setStartDate(startDate);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-
-        Long idSubscriptionBox = currentSubscription.getSubscriptionBoxId();
-        SubscriptionBox subscriptionBox = SubscriptionBoxRepository.findById(idSubscriptionBox).orElse(null);
-
-        if(subscriptionBox == null) {
-            return;
-        }
-
-        String subscriptionBoxType = subscriptionBox.getType();
-
-        if (subscriptionBoxType.equals("MONTHLY")) {
-            calendar.add(Calendar.MONTH, 1);
-            currentSubscription.setUniqueCode("MTH"+'-'+tempId.toString());
-        } else if (subscriptionBoxType.equals("QUARTERLY")) {
-            calendar.add(Calendar.MONTH, 3);
-            currentSubscription.setUniqueCode("QTR"+'-'+tempId.toString());
-        } else if(subscriptionBoxType.equals("SEMIANNUAL")) {
-            calendar.add(Calendar.MONTH, 6);
-            currentSubscription.setUniqueCode("SAA"+'-'+tempId.toString());
-        }
-        Date endDate = calendar.getTime();
-        currentSubscription.setEndDate(endDate);
-
+        return this;
     }
 
     public SubscriptionBuilder addStatus(String status) {
@@ -68,11 +41,47 @@ public class SubscriptionBuilder {
         throw new IllegalArgumentException();
     }
 
+    public SubscriptionBuilder addIdBox(Long idBox) {
+        currentSubscription.setSubscriptionBoxId(idBox);
+        return this;
+    }
 
-    // public SubscriptionBuilder addBuyerUsername(String buyerUsername) {
-    //     currentSubscription.setBuyerUsername(buyerUsername);
-    //     return this;
-    // }
+    public SubscriptionBuilder addUniqueCode() {
+        Date startDate = new Date();
+        currentSubscription.setStartDate(startDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+
+        Long idSubscriptionBox = currentSubscription.getSubscriptionBoxId();
+        SubscriptionBox subscriptionBox = SubscriptionBoxRepository.findById(idSubscriptionBox).orElse(null);
+
+        if(subscriptionBox == null) {
+            return null;
+        }
+
+        String subscriptionBoxType = subscriptionBox.getType();
+
+        if (subscriptionBoxType.equals("MONTHLY")) {
+            calendar.add(Calendar.MONTH, 1);
+            currentSubscription.setUniqueCode("MTH"+'-'+currentSubscription.getId().toString());
+        } else if (subscriptionBoxType.equals("QUARTERLY")) {
+            calendar.add(Calendar.MONTH, 3);
+            currentSubscription.setUniqueCode("QTR"+'-'+currentSubscription.getId().toString());
+        } else if(subscriptionBoxType.equals("SEMIANNUAL")) {
+            calendar.add(Calendar.MONTH, 6);
+            currentSubscription.setUniqueCode("SAA"+'-'+currentSubscription.getId().toString());
+        }
+        Date endDate = calendar.getTime();
+        currentSubscription.setEndDate(endDate);
+
+        return this;
+
+    }
+
+     public SubscriptionBuilder addBuyerUsername(String buyerUsername) {
+         currentSubscription.setUsername(buyerUsername);
+         return this;
+     }
 
     public Subscription build() {
         return currentSubscription;
