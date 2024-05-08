@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.subscriptionmanagement.controller;
 
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
+import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionRepository;
 import id.ac.ui.cs.advprog.subscriptionmanagement.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class SubscriptionController {
         try {
             String username = requestBody.get("username");
             Subscription subscription = subscriptionService.createSubscription(id, username);
-            return ResponseEntity.ok(subscription);
+            return new ResponseEntity<>(subscription, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

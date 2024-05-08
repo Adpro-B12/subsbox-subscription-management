@@ -38,11 +38,12 @@ public class SubscriptionImpl implements SubscriptionService {
 
     @Override
     public Subscription createSubscription(Long BoxId, String buyerUsername) {
-        return SubscriptionBuilder.reset()
+        Subscription newSubscription = SubscriptionBuilder.reset()
                 .addIdBox(BoxId)
                 .addUniqueCode()
                 .addBuyerUsername(buyerUsername)
                 .build();
+        return SubscriptionRepository.save(newSubscription);
     }
 
 }
