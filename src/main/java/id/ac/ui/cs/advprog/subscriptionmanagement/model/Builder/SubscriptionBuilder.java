@@ -3,6 +3,7 @@ package id.ac.ui.cs.advprog.subscriptionmanagement.model.Builder;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Enum.SubscriptionStatus;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
 import org.springframework.stereotype.Component;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,7 +33,13 @@ public class SubscriptionBuilder {
         currentSubscription.setStartDate(startDate);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-        String subscriptionBoxType = currentSubscription.getSubscriptionBox().getType();
+        SubscriptionBox subscriptionBox = currentSubscription.getSubscriptionBox();
+
+        if(subscriptionBox == null) {
+            return null;
+        }
+
+        String subscriptionBoxType = subscriptionBox.getType();
         
         if (subscriptionBoxType.equals("MONTHLY")) {
             calendar.add(Calendar.MONTH, 1);

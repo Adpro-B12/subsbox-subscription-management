@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.subscriptionmanagement.service;
 
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
 import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionRepository;
 
 import java.util.List;
@@ -13,5 +14,13 @@ public interface SubscriptionService {
     public Subscription findById(UUID SubscriptionId);
     public Subscription update(Subscription Subscription);
     public Subscription deleteSubscriptionById(UUID SubscriptionId);
+
+    // Fitur 1
+    public List<SubscriptionBox> getAllBoxes();
+    public List<SubscriptionBox> getFilteredBoxesByPrice(int price);
+
+    // Fitur 2
+
+
     // public List<Subscription> findAllByBuyerUsername(String buyerUsername);
 }

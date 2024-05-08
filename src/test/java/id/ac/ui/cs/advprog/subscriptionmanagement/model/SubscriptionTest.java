@@ -42,7 +42,7 @@ public class SubscriptionTest {
 
         // Create a sample subscription
         subscription = new Subscription();
-        subscription.setId(UUID.randomUUID());
+        subscription.setId(91827L);
         subscription.setUniqueCode(SubscriptionType.MONTHLY.getCode() + "-" + UUID.randomUUID().toString().substring(0, 8));
         subscription.setStatus(SubscriptionStatus.SUBSCRIBED.getStatus());
         subscription.setStartDate(new Date());

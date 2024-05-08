@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.controller;
 
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
 import id.ac.ui.cs.advprog.subscriptionmanagement.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,15 @@ public class SubscriptionController {
         List<Subscription> subscriptions = subscriptionService.findAll();
         return ResponseEntity.ok(subscriptions);
     }
+
+//    @GetMapping
+//    public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxes(
+//            @RequestParam(required = false) Double minPrice,
+//            @RequestParam(required = false) Double maxPrice,
+//            @RequestParam(required = false) String keywords) {
+//        List<Subscription> boxes = subscriptionService.findAllBoxes(minPrice, maxPrice, keywords);
+//        return new ResponseEntity<>(boxes, HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Subscription> getSubscriptionById(@PathVariable UUID id) {
