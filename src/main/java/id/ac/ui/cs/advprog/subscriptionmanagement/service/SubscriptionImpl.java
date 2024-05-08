@@ -14,36 +14,47 @@ import java.util.UUID;
 @Service
 public class SubscriptionImpl implements SubscriptionService {
     @Autowired
-    private SubscriptionRepository SubscriptionRepository;
+    private SubscriptionRepository subscriptionRepository;
     @Autowired
-    private SubscriptionBoxRepository SubscriptionBoxRepository;
+    private SubscriptionBoxRepository subscriptionBoxRepository;
 
-
-    private SubscriptionBuilder SubscriptionBuilder;
+    @Autowired
+    private SubscriptionBuilder subscriptionBuilder;
 
     @Override
     public List<SubscriptionBox> getAllBoxes() {
-        return SubscriptionBoxRepository.findAll();
+        return subscriptionBoxRepository.findAll();
     }
 
     @Override
     public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
-        return SubscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice);
+        return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice);
     }
 
     @Override
     public List<SubscriptionBox> getFilteredBoxesByName(String name) {
-        return SubscriptionBoxRepository.findByNameContaining(name);
+        return subscriptionBoxRepository.findByNameContaining(name);
     }
 
     @Override
     public Subscription createSubscription(Long BoxId, String buyerUsername) {
-        Subscription newSubscription = SubscriptionBuilder.reset()
+
+        SubscriptionBox subscriptionBox = subscriptionBoxRepository.findById(BoxId).get();
+        System.out.println("masuk create");
+        subscriptionBuilder = new SubscriptionBuilder();
+        Subscription newSubscription = subscriptionBuilder.reset()
                 .addIdBox(BoxId)
-                .addUniqueCode()
+                .addUniqueCode(subscriptionBox)
                 .addBuyerUsername(buyerUsername)
                 .build();
-        return SubscriptionRepository.save(newSubscription);
+        return subscriptionRepository.save(newSubscription);
+    }
+
+    @Override
+    public Subscription cancelSubscription(String uniqueCode) {
+        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
+        subscription.setStatus("CANCELLED");
+        return subscription;
     }
 
 }

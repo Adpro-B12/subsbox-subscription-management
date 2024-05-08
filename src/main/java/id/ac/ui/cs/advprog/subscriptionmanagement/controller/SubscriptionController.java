@@ -34,7 +34,7 @@ public class SubscriptionController {
         return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/subscribe")
+    @PostMapping("/subscribe/{id}")
     public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
         try {
             String username = requestBody.get("username");
@@ -44,6 +44,20 @@ public class SubscriptionController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+//    @PostMapping("/cancel")
+//    public ResponseEntity<Subscription> cancelSubscription(@RequestBody Map<String, String> requestBody) {
+//        try {
+//            String uniqueCode = requestBody.get("uniqueCode");
+//            Subscription subscription = subscriptionService.cancelSubscription(uniqueCode);
+//            return new ResponseEntity<>(subscription, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
+
+
+
 
 //    @GetMapping("/{id}")
 //    public ResponseEntity<Subscription> getSubscriptionById(@PathVariable UUID id) {

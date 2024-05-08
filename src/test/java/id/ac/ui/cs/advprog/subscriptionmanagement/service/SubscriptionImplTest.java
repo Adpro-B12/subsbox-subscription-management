@@ -1,21 +1,38 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.service;
 
+import static net.bytebuddy.matcher.ElementMatchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
 import id.ac.ui.cs.advprog.subscriptionmanagement.repository.*;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Builder.SubscriptionBuilder;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class SubscriptionImplTest {
 
+    private MockMvc mockMvc;
+
+    @Mock
+    private SubscriptionRepository subscriptionRepository;
     @Mock
     private SubscriptionBoxRepository subscriptionBoxRepository;
 
@@ -29,6 +46,8 @@ public class SubscriptionImplTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testGetAllBoxesReturnsAllBoxes() {
@@ -62,26 +81,41 @@ public class SubscriptionImplTest {
 
     @Test
     public void testCreateSubscription() {
-        Subscription mockSubscription = new Subscription();
         Long boxId = 1L;
-        String buyerUsername = "testUser";
+        String buyerUsername = "user123";
 
-        when(subscriptionBuilder.reset()).thenReturn(subscriptionBuilder);
-        when(subscriptionBuilder.addIdBox(boxId)).thenReturn(subscriptionBuilder);
-        when(subscriptionBuilder.addUniqueCode()).thenReturn(subscriptionBuilder);
-        when(subscriptionBuilder.addBuyerUsername(buyerUsername)).thenReturn(subscriptionBuilder);
-        when(subscriptionBuilder.build()).thenReturn(mockSubscription);
+        Subscription mockedSubscription = new Subscription();
+        SubscriptionBox subscriptionBox = new SubscriptionBox();
+        subscriptionBox.setId(boxId);
+        subscriptionBox.setType("MONTHLY");
+        when(subscriptionBoxRepository.findById(boxId)).thenReturn(Optional.of(subscriptionBox));
+        when(subscriptionRepository.save(any(Subscription.class))).thenReturn(mockedSubscription);
 
-        Subscription subscription = subscriptionService.createSubscription(boxId, buyerUsername);
+        Subscription result = subscriptionService.createSubscription(boxId, buyerUsername);
 
-        verify(subscriptionBuilder).reset();
-        verify(subscriptionBuilder).addIdBox(boxId);
-        verify(subscriptionBuilder).addUniqueCode();
-        verify(subscriptionBuilder).addBuyerUsername(buyerUsername);
-        verify(subscriptionBuilder).build();
-
-        assertNotNull(subscription);
+        verify(subscriptionRepository).save(any(Subscription.class));
+        assertNotNull(result);
     }
+
+    @Test
+    public void testCancelSubscription() {
+        // Setup
+        String uniqueCode = "MTH-12345";
+        Subscription mockSubscription = new Subscription();
+        mockSubscription.setStatus("ACTIVE");  // Initial status
+
+        // Define behavior of the mocked repository
+        when(subscriptionRepository.findByUniqueCode(uniqueCode)).thenReturn(mockSubscription);
+
+        // Execute
+        Subscription result = subscriptionService.cancelSubscription(uniqueCode);
+
+        // Verify
+        assertNotNull(result);
+        assertEquals("CANCELLED", result.getStatus());
+        verify(subscriptionRepository).findByUniqueCode(uniqueCode);  // Verify that the repository was called correctly
+    }
+
 }
 //    @Test
 //    public void testCreateSubscription() {

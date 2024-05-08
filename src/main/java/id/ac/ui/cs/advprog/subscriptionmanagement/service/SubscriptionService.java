@@ -18,6 +18,7 @@ public interface SubscriptionService {
 
     // Fitur 2
     public Subscription createSubscription(Long BoxId, String buyerUsername);
+    public Subscription cancelSubscription(String uniqueCode);
 
 
     // public List<Subscription> findAllByBuyerUsername(String buyerUsername);
