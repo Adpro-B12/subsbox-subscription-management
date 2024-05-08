@@ -1,10 +1,11 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
-import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionBoxRepository;
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.*;
+import id.ac.ui.cs.advprog.subscriptionmanagement.repository.*;
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.Builder.SubscriptionBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +18,9 @@ public class SubscriptionImplTest {
 
     @Mock
     private SubscriptionBoxRepository subscriptionBoxRepository;
+
+    @Mock
+    private SubscriptionBuilder subscriptionBuilder;
 
     @InjectMocks
     private SubscriptionImpl subscriptionService;
@@ -54,6 +58,29 @@ public class SubscriptionImplTest {
 
         assertEquals(2, filteredBoxes.size());
         verify(subscriptionBoxRepository).findByPriceBetween(100, 200);
+    }
+
+    @Test
+    public void testCreateSubscription() {
+        Subscription mockSubscription = new Subscription();
+        Long boxId = 1L;
+        String buyerUsername = "testUser";
+
+        when(subscriptionBuilder.reset()).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.addIdBox(boxId)).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.addUniqueCode()).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.addBuyerUsername(buyerUsername)).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.build()).thenReturn(mockSubscription);
+
+        Subscription subscription = subscriptionService.create(boxId, buyerUsername);
+
+        verify(subscriptionBuilder).reset();
+        verify(subscriptionBuilder).addIdBox(boxId);
+        verify(subscriptionBuilder).addUniqueCode();
+        verify(subscriptionBuilder).addBuyerUsername(buyerUsername);
+        verify(subscriptionBuilder).build();
+
+        assertNotNull(subscription);
     }
 }
 //    @Test
