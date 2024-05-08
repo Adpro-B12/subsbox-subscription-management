@@ -45,18 +45,29 @@ public class SubscriptionController {
         }
     }
 
-//    @PostMapping("/cancel")
-//    public ResponseEntity<Subscription> cancelSubscription(@RequestBody Map<String, String> requestBody) {
-//        try {
-//            String uniqueCode = requestBody.get("uniqueCode");
-//            Subscription subscription = subscriptionService.cancelSubscription(uniqueCode);
-//            return new ResponseEntity<>(subscription, HttpStatus.OK);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+    @PostMapping("/cancel")
+    public ResponseEntity<Subscription> cancelSubscription(@RequestBody Map<String, String> requestBody) {
+        try {
+            String uniqueCode = requestBody.get("uniqueCode");
+            Subscription subscription = subscriptionService.cancelSubscription(uniqueCode);
+            return new ResponseEntity<>(subscription, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 
+    @GetMapping("/user-subscriptions")
+    public ResponseEntity<List<Subscription>> getUserSubscriptions(@RequestParam String ownerUsername) {
+        List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByUsername(ownerUsername);
+        return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
+    }
+
+    @GetMapping("/user-subscriptions-status")
+    public ResponseEntity<List<Subscription>> getSubscriptionByStatus(@RequestParam String status) {
+        List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByStatus(status);
+        return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
+    }
 
 
 //    @GetMapping("/{id}")

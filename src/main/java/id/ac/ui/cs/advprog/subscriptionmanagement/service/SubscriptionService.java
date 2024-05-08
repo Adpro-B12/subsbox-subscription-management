@@ -20,6 +20,7 @@ public interface SubscriptionService {
     public Subscription createSubscription(Long BoxId, String buyerUsername);
     public Subscription cancelSubscription(String uniqueCode);
 
-
-    // public List<Subscription> findAllByBuyerUsername(String buyerUsername);
+    // Fitur 3
+    public List<Subscription> getFilteredSubscriptionsByStatus(String status);
+    public List<Subscription> getFilteredSubscriptionsByUsername(String buyerUsername);
 }

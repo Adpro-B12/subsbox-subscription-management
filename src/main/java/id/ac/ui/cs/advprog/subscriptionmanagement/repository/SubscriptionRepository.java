@@ -14,4 +14,8 @@ import java.util.UUID;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     Subscription findByUniqueCode(String uniqueCode);
+
+    List<Subscription> findByUsername(String buyerUsername);
+
+    List<Subscription> findByStatus(String status);
 }

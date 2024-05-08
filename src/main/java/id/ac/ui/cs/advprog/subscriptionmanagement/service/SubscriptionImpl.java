@@ -57,4 +57,15 @@ public class SubscriptionImpl implements SubscriptionService {
         return subscription;
     }
 
+
+    @Override
+    public List<Subscription> getFilteredSubscriptionsByUsername(String buyerUsername) {
+        return subscriptionRepository.findByUsername(buyerUsername);
+    }
+
+    @Override
+    public List<Subscription> getFilteredSubscriptionsByStatus(String status) {
+        return subscriptionRepository.findByStatus(status);
+    }
+
 }
