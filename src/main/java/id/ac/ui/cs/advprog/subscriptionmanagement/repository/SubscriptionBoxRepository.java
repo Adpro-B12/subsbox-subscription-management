@@ -10,5 +10,6 @@ import java.util.List;
 
 @Repository
 public interface SubscriptionBoxRepository extends JpaRepository<SubscriptionBox, Long>{
-    List<SubscriptionBox> findByPriceRange(int minPrice, int maxPrice);
+    List<SubscriptionBox> findByPriceBetween(int minPrice, int maxPrice);
+    List<SubscriptionBox> findByNameContaining(String name);
 }

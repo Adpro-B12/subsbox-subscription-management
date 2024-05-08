@@ -4,43 +4,47 @@ import id.ac.ui.cs.advprog.subscriptionmanagement.model.Enum.SubscriptionStatus;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
+import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionBoxRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Calendar;
 import java.util.Date;
 
 import java.util.UUID;
 
-@Component
 public class SubscriptionBuilder {
     private Subscription currentSubscription;
+
+    private SubscriptionBoxRepository SubscriptionBoxRepository;
 
     public SubscriptionBuilder(){
         this.reset();
     }
 
-    public SubscriptionBuilder reset() {
+    public void reset() {
         currentSubscription = new Subscription();
         firstSetUp();
-        return this;
     }
 
-    public SubscriptionBuilder firstSetUp() {
+    public void firstSetUp() {
         UUID tempId = UUID.randomUUID();
 
         currentSubscription.setStatus(SubscriptionStatus.PENDING.getStatus());
 
-        Date startDate = new Date(); 
+        Date startDate = new Date();
         currentSubscription.setStartDate(startDate);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
-        SubscriptionBox subscriptionBox = currentSubscription.getSubscriptionBox();
+
+        Long idSubscriptionBox = currentSubscription.getSubscriptionBoxId();
+        SubscriptionBox subscriptionBox = SubscriptionBoxRepository.findById(idSubscriptionBox).orElse(null);
 
         if(subscriptionBox == null) {
-            return null;
+            return;
         }
 
         String subscriptionBoxType = subscriptionBox.getType();
-        
+
         if (subscriptionBoxType.equals("MONTHLY")) {
             calendar.add(Calendar.MONTH, 1);
             currentSubscription.setUniqueCode("MTH"+'-'+tempId.toString());
@@ -53,10 +57,7 @@ public class SubscriptionBuilder {
         }
         Date endDate = calendar.getTime();
         currentSubscription.setEndDate(endDate);
-        
-        
-       
-        return this;
+
     }
 
     public SubscriptionBuilder addStatus(String status) {

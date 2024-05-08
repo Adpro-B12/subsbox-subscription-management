@@ -1,8 +1,6 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +9,10 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
 
-@Getter @Setter
+@Getter
+@Setter
+@Entity
+@Table(name = "subscription_boxes")
 public class SubscriptionBox {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +20,8 @@ public class SubscriptionBox {
     String name;
     String type;
     int price;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<Item> items;
     // Rating rating;
 }

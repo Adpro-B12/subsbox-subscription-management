@@ -14,6 +14,7 @@ public interface SubscriptionService {
     // Fitur 1
     public List<SubscriptionBox> getAllBoxes();
     public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice);
+    public List<SubscriptionBox> getFilteredBoxesByName(String name);
 
     // Fitur 2
 

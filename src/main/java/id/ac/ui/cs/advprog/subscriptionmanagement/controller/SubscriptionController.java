@@ -18,7 +18,7 @@ public class SubscriptionController {
     @Autowired
     private SubscriptionService subscriptionService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<SubscriptionBox>> getAllSubscriptionBoxes() {
         List<SubscriptionBox> boxes = subscriptionService.getAllBoxes();
         return new ResponseEntity<>(boxes, HttpStatus.OK);

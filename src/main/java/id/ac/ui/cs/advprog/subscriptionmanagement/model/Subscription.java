@@ -7,7 +7,10 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
+@Entity
+@Table(name = "subscriptions")
 public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +19,7 @@ public class Subscription {
     private String status;
     private Date startDate;
     private Date endDate;
-    private SubscriptionBox subscriptionBox;
+    private Long subscriptionBoxId;
 
 //    private User user;
 }

@@ -17,7 +17,8 @@ public class SubscriptionImpl implements SubscriptionService {
     private SubscriptionRepository SubscriptionRepository;
     @Autowired
     private SubscriptionBoxRepository SubscriptionBoxRepository;
-    @Autowired
+
+
     private SubscriptionBuilder SubscriptionBuilder;
 
     @Override
@@ -27,7 +28,12 @@ public class SubscriptionImpl implements SubscriptionService {
 
     @Override
     public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
-        return SubscriptionBoxRepository.findByPriceRange(minPrice, maxPrice);
+        return SubscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice);
+    }
+
+    @Override
+    public List<SubscriptionBox> getFilteredBoxesByName(String name) {
+        return SubscriptionBoxRepository.findByNameContaining(name);
     }
 
 }
