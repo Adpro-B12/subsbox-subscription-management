@@ -9,15 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SubscriptionService {
-    public Subscription create(Subscription Subscription);
-    public List<Subscription> findAll();
-    public Subscription findById(UUID SubscriptionId);
-    public Subscription update(Subscription Subscription);
-    public Subscription deleteSubscriptionById(UUID SubscriptionId);
+//    public Subscription create(Subscription Subscription);
 
     // Fitur 1
     public List<SubscriptionBox> getAllBoxes();
-    public List<SubscriptionBox> getFilteredBoxesByPrice(int price);
+    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice);
 
     // Fitur 2
 

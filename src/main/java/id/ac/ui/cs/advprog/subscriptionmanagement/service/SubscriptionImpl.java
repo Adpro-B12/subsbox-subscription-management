@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.service;
 
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.Builder.SubscriptionBuilder;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
 import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionRepository;
@@ -14,46 +15,19 @@ import java.util.UUID;
 public class SubscriptionImpl implements SubscriptionService {
     @Autowired
     private SubscriptionRepository SubscriptionRepository;
-
     @Autowired
     private SubscriptionBoxRepository SubscriptionBoxRepository;
-
-    @Override
-    public Subscription create(Subscription Subscription) {
-        return SubscriptionRepository.save(Subscription);
-    }
-
-    @Override
-    public List<Subscription> findAll() {
-        return SubscriptionRepository.findAll();
-    }
-
-    @Override
-    public Subscription findById(UUID SubscriptionId) {
-        return SubscriptionRepository.findById(SubscriptionId);
-    }
-
-    @Override
-    public Subscription update(Subscription Subscription) {
-        return SubscriptionRepository.save(Subscription);
-    }
-    
-    @Override
-    public Subscription deleteSubscriptionById(UUID SubscriptionId) {
-        return SubscriptionRepository.deleteById(SubscriptionId);
-    }
+    @Autowired
+    private SubscriptionBuilder SubscriptionBuilder;
 
     @Override
     public List<SubscriptionBox> getAllBoxes() {
-        return SubscriptionBoxRepository.viewAll();
+        return SubscriptionBoxRepository.findAll();
     }
 
     @Override
-    public List<SubscriptionBox> getFilteredBoxesByPrice(int price) {
-        return SubscriptionBoxRepository.filterByPrice(price);
+    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
+        return SubscriptionBoxRepository.findByPriceRange(minPrice, maxPrice);
     }
-    // @Override
-    // public List<Subscription> findAllByBuyerUsername(String buyerUsername) {
-    //     return SubscriptionRepository.findAllByBuyerUsername(buyerUsername);
-    // }
+
 }

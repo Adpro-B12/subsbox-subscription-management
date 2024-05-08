@@ -1,5 +1,8 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +13,9 @@ import java.util.List;
 
 @Getter @Setter
 public class SubscriptionBox {
-    String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     String name;
     String type;
     int price;

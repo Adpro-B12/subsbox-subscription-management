@@ -26,7 +26,7 @@ public class SubscriptionBuilder {
 
     public SubscriptionBuilder firstSetUp() {
         UUID tempId = UUID.randomUUID();
-        currentSubscription.setId(tempId);
+
         currentSubscription.setStatus(SubscriptionStatus.PENDING.getStatus());
 
         Date startDate = new Date(); 

@@ -19,46 +19,45 @@ public class SubscriptionController {
     private SubscriptionService subscriptionService;
 
     @GetMapping
-    public ResponseEntity<List<Subscription>> getAllSubscriptions() {
-        List<Subscription> subscriptions = subscriptionService.findAll();
-        return ResponseEntity.ok(subscriptions);
+    public ResponseEntity<List<SubscriptionBox>> getAllSubscriptionBoxes() {
+        List<SubscriptionBox> boxes = subscriptionService.getAllBoxes();
+        return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxes(
-//            @RequestParam(required = false) Double minPrice,
-//            @RequestParam(required = false) Double maxPrice,
-//            @RequestParam(required = false) String keywords) {
-//        List<Subscription> boxes = subscriptionService.findAllBoxes(minPrice, maxPrice, keywords);
-//        return new ResponseEntity<>(boxes, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
+            @RequestParam(required = false) int minPrice,
+            @RequestParam(required = false) int maxPrice) {
+        List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice);
+        return new ResponseEntity<>(boxes, HttpStatus.OK);
+    }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Subscription> getSubscriptionById(@PathVariable UUID id) {
+//        Subscription subscription = subscriptionService.findById(id);
+//        if (subscription != null) {
+//            return ResponseEntity.ok(subscription);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
 //    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Subscription> getSubscriptionById(@PathVariable UUID id) {
-        Subscription subscription = subscriptionService.findById(id);
-        if (subscription != null) {
-            return ResponseEntity.ok(subscription);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping
-    public ResponseEntity<Subscription> createSubscription(@RequestBody Subscription subscription) {
-        Subscription createdSubscription = subscriptionService.create(subscription);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdSubscription);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Subscription> updateSubscription(@PathVariable UUID id, @RequestBody Subscription subscription) {
-        subscription.setId(id);
-        Subscription updatedSubscription = subscriptionService.update(subscription);
-        return ResponseEntity.ok(updatedSubscription);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSubscription(@PathVariable UUID id) {
-        subscriptionService.deleteSubscriptionById(id);
-        return ResponseEntity.noContent().build();
-    }
+//
+//    @PostMapping
+//    public ResponseEntity<Subscription> createSubscription(@RequestBody Subscription subscription) {
+//        Subscription createdSubscription = subscriptionService.create(subscription);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createdSubscription);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Subscription> updateSubscription(@PathVariable Long id, @RequestBody Subscription subscription) {
+//        subscription.setId(id);
+//        Subscription updatedSubscription = subscriptionService.update(subscription);
+//        return ResponseEntity.ok(updatedSubscription);
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteSubscription(@PathVariable UUID id) {
+//        subscriptionService.deleteSubscriptionById(id);
+//        return ResponseEntity.noContent().build();
+//    }
 }
