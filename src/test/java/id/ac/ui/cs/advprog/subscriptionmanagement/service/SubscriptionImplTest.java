@@ -116,6 +116,50 @@ public class SubscriptionImplTest {
         verify(subscriptionRepository).findByUniqueCode(uniqueCode);  // Verify that the repository was called correctly
     }
 
+    @Test
+    public void testGetFilteredSubscriptionsByUsername() {
+        // Setup
+        String buyerUsername = "user123";
+        List<Subscription> expectedSubscriptions = Arrays.asList(
+                new Subscription(), // Add more properties as needed
+                new Subscription()  // Add more properties as needed
+        );
+
+        // Define behavior of the mocked repository
+        when(subscriptionRepository.findByUsername(buyerUsername)).thenReturn(expectedSubscriptions);
+
+        // Execute
+        List<Subscription> result = subscriptionService.getFilteredSubscriptionsByUsername(buyerUsername);
+
+        // Verify
+        assertNotNull(result);
+        assertEquals(expectedSubscriptions.size(), result.size());
+        assertEquals(expectedSubscriptions, result);
+        verify(subscriptionRepository).findByUsername(buyerUsername);
+    }
+
+    @Test
+    public void testGetFilteredSubscriptionsByStatus() {
+        // Setup
+        String status = "ACTIVE";
+        List<Subscription> expectedSubscriptions = Arrays.asList(
+                new Subscription(), // Add more properties as needed
+                new Subscription()  // Add more properties as needed
+        );
+
+        // Define behavior of the mocked repository
+        when(subscriptionRepository.findByStatus(status)).thenReturn(expectedSubscriptions);
+
+        // Execute
+        List<Subscription> result = subscriptionService.getFilteredSubscriptionsByStatus(status);
+
+        // Verify
+        assertNotNull(result);
+        assertEquals(expectedSubscriptions.size(), result.size());
+        assertEquals(expectedSubscriptions, result);
+        verify(subscriptionRepository).findByStatus(status);
+    }
+
 }
 //    @Test
 //    public void testCreateSubscription() {
