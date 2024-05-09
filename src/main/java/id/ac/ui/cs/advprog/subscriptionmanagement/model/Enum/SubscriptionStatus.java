@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 public enum SubscriptionStatus {
     PENDING("PENDING"),
-    SUBSCRIBED("SUBSCRIBED"),
+    APPROVED("APPROVED"),
     CANCELLED("CANCELLED");
 
     private final String status;

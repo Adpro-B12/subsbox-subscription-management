@@ -14,4 +14,11 @@ public class Item {
     private Long id;
     private String name;
     private int quantity;
+
+    public Item() {
+
+    }
+    public Item(String name) {
+        this.name = name;
+    }
 }

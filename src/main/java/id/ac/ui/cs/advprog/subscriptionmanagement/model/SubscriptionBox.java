@@ -24,4 +24,12 @@ public class SubscriptionBox {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<Item> items;
     // Rating rating;
+    public SubscriptionBox() {
+    }
+
+    public SubscriptionBox(String name,  String type, int price) {
+        this.name = name;
+        this.type = type;
+        this.price = price;
+    }
 }

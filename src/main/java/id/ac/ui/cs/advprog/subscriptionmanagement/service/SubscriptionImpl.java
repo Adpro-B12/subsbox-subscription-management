@@ -40,7 +40,6 @@ public class SubscriptionImpl implements SubscriptionService {
     public Subscription createSubscription(Long BoxId, String buyerUsername) {
 
         SubscriptionBox subscriptionBox = subscriptionBoxRepository.findById(BoxId).get();
-        System.out.println("masuk create");
         subscriptionBuilder = new SubscriptionBuilder();
         Subscription newSubscription = subscriptionBuilder.reset()
                 .addIdBox(BoxId)
@@ -66,6 +65,36 @@ public class SubscriptionImpl implements SubscriptionService {
     @Override
     public List<Subscription> getFilteredSubscriptionsByStatus(String status) {
         return subscriptionRepository.findByStatus(status);
+    }
+
+    @Override
+    public Subscription approveSubscription(String uniqueCode) {
+        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
+        if (subscription != null) {
+            subscription.setStatus("Approved");
+            subscriptionRepository.save(subscription);
+        }
+        return subscription;
+    }
+
+    @Override
+    public Subscription rejectSubscription(String uniqueCode) {
+        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
+        if (subscription != null) {
+            subscription.setStatus("Rejected");
+            subscriptionRepository.save(subscription);
+        }
+        return subscription;
+    }
+
+    @Override
+    public Subscription setSubscriptionPending(String uniqueCode) {
+        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
+        if (subscription != null) {
+            subscription.setStatus("Pending");
+            subscriptionRepository.save(subscription);
+        }
+        return subscription;
     }
 
 }

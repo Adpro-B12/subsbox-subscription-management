@@ -26,11 +26,18 @@ public class SubscriptionController {
         return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/price")
     public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
             @RequestParam(required = false) int minPrice,
             @RequestParam(required = false) int maxPrice) {
         List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice);
+        return new ResponseEntity<>(boxes, HttpStatus.OK);
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByName(
+            @RequestParam(required = false) String name) {
+        List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByName(name);
         return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 
@@ -57,13 +64,13 @@ public class SubscriptionController {
     }
 
 
-    @GetMapping("/user-subscriptions")
+    @GetMapping("/subscriptions")
     public ResponseEntity<List<Subscription>> getUserSubscriptions(@RequestParam String ownerUsername) {
         List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByUsername(ownerUsername);
         return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
     }
 
-    @GetMapping("/user-subscriptions-status")
+    @GetMapping("/subscriptions_by_status")
     public ResponseEntity<List<Subscription>> getSubscriptionByStatus(@RequestParam String status) {
         List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByStatus(status);
         return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
