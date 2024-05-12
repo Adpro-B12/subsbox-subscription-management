@@ -1,43 +1,40 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.service;
 
-import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
-import id.ac.ui.cs.advprog.subscriptionmanagement.repository.*;
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.Builder.SubscriptionBuilder;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
+import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
+import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionBoxRepository;
+import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionRepository;
 
 public class SubscriptionImplTest {
 
-    private MockMvc mockMvc;
+    // private MockMvc mockMvc;
 
     @Mock
     private SubscriptionRepository subscriptionRepository;
     @Mock
     private SubscriptionBoxRepository subscriptionBoxRepository;
 
-    @Mock
-    private SubscriptionBuilder subscriptionBuilder;
+    // @Mock
+    // private SubscriptionBuilder subscriptionBuilder;
 
     @InjectMocks
     private SubscriptionImpl subscriptionService;
@@ -47,7 +44,7 @@ public class SubscriptionImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    // private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testGetAllBoxesReturnsAllBoxes() {
@@ -57,7 +54,9 @@ public class SubscriptionImplTest {
 
         when(subscriptionBoxRepository.findAll()).thenReturn(mockBoxes);
 
-        List<SubscriptionBox> boxes = subscriptionService.getAllBoxes();
+        CompletableFuture<List<SubscriptionBox>> boxesFuture = subscriptionService.getAllBoxesAsync();
+
+        List<SubscriptionBox> boxes = boxesFuture.join(); // Wait for the CompletableFuture to complete
 
         assertEquals(2, boxes.size());
         verify(subscriptionBoxRepository).findAll();
@@ -73,7 +72,9 @@ public class SubscriptionImplTest {
 
         when(subscriptionBoxRepository.findByPriceBetween(100, 200)).thenReturn(mockBoxes);
 
-        List<SubscriptionBox> filteredBoxes = subscriptionService.getFilteredBoxesByPrice(100, 200);
+        CompletableFuture<List<SubscriptionBox>> filteredBoxesFuture = subscriptionService.getFilteredBoxesByPriceAsync(100, 200);
+
+        List<SubscriptionBox> filteredBoxes = filteredBoxesFuture.join(); // Wait for the CompletableFuture to complete
 
         assertEquals(2, filteredBoxes.size());
         verify(subscriptionBoxRepository).findByPriceBetween(100, 200);
@@ -91,7 +92,9 @@ public class SubscriptionImplTest {
         when(subscriptionBoxRepository.findById(boxId)).thenReturn(Optional.of(subscriptionBox));
         when(subscriptionRepository.save(any(Subscription.class))).thenReturn(mockedSubscription);
 
-        Subscription result = subscriptionService.createSubscription(boxId, buyerUsername);
+        CompletableFuture<Subscription> resultFuture = subscriptionService.createSubscriptionAsync(boxId, buyerUsername);
+
+        Subscription result = resultFuture.join();
 
         verify(subscriptionRepository).save(any(Subscription.class));
         assertNotNull(result);
@@ -108,7 +111,9 @@ public class SubscriptionImplTest {
         when(subscriptionRepository.findByUniqueCode(uniqueCode)).thenReturn(mockSubscription);
 
         // Execute
-        Subscription result = subscriptionService.cancelSubscription(uniqueCode);
+        CompletableFuture<Subscription> resultFuture = subscriptionService.cancelSubscriptionAsync(uniqueCode);
+
+        Subscription result = resultFuture.join();
 
         // Verify
         assertNotNull(result);
@@ -129,7 +134,9 @@ public class SubscriptionImplTest {
         when(subscriptionRepository.findByUsername(buyerUsername)).thenReturn(expectedSubscriptions);
 
         // Execute
-        List<Subscription> result = subscriptionService.getFilteredSubscriptionsByUsername(buyerUsername);
+        CompletableFuture<List<Subscription>> resultFuture = subscriptionService.getFilteredSubscriptionsByUsernameAsync(buyerUsername);
+
+        List<Subscription> result = resultFuture.join();
 
         // Verify
         assertNotNull(result);
@@ -151,7 +158,9 @@ public class SubscriptionImplTest {
         when(subscriptionRepository.findByStatus(status)).thenReturn(expectedSubscriptions);
 
         // Execute
-        List<Subscription> result = subscriptionService.getFilteredSubscriptionsByStatus(status);
+        CompletableFuture<List<Subscription>> resultFuture = subscriptionService.getFilteredSubscriptionsByStatusAsync(status);
+
+        List<Subscription> result = resultFuture.join();
 
         // Verify
         assertNotNull(result);
@@ -159,7 +168,6 @@ public class SubscriptionImplTest {
         assertEquals(expectedSubscriptions, result);
         verify(subscriptionRepository).findByStatus(status);
     }
-
 }
 //    @Test
 //    public void testCreateSubscription() {
