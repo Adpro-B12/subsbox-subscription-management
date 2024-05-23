@@ -68,33 +68,44 @@ public class SubscriptionImpl implements SubscriptionService {
     }
 
     @Override
-    public Subscription approveSubscription(String uniqueCode) {
+    public Subscription setSubscriptionStatus(String uniqueCode, String status) {
+
         Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
         if (subscription != null) {
-            subscription.setStatus("Approved");
+            subscription.setStatus(status);
             subscriptionRepository.save(subscription);
         }
         return subscription;
     }
 
-    @Override
-    public Subscription rejectSubscription(String uniqueCode) {
-        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-        if (subscription != null) {
-            subscription.setStatus("Rejected");
-            subscriptionRepository.save(subscription);
-        }
-        return subscription;
-    }
-
-    @Override
-    public Subscription setSubscriptionPending(String uniqueCode) {
-        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-        if (subscription != null) {
-            subscription.setStatus("Pending");
-            subscriptionRepository.save(subscription);
-        }
-        return subscription;
-    }
+//    @Override
+//    public Subscription approveSubscription(String uniqueCode) {
+//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
+//        if (subscription != null) {
+//            subscription.setStatus("Approved");
+//            subscriptionRepository.save(subscription);
+//        }
+//        return subscription;
+//    }
+//
+//    @Override
+//    public Subscription rejectSubscription(String uniqueCode) {
+//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
+//        if (subscription != null) {
+//            subscription.setStatus("Rejected");
+//            subscriptionRepository.save(subscription);
+//        }
+//        return subscription;
+//    }
+//
+//    @Override
+//    public Subscription setSubscriptionPending(String uniqueCode) {
+//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
+//        if (subscription != null) {
+//            subscription.setStatus("Pending");
+//            subscriptionRepository.save(subscription);
+//        }
+//        return subscription;
+//    }
 
 }

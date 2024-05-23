@@ -27,7 +27,8 @@ public class SubscriptionBox {
     public SubscriptionBox() {
     }
 
-    public SubscriptionBox(String name,  String type, int price) {
+    public SubscriptionBox(String name,  String type, int price, Long id) {
+        this.id = id;
         this.name = name;
         this.type = type;
         this.price = price;

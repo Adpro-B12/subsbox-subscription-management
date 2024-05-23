@@ -25,8 +25,9 @@ public interface SubscriptionService {
     public List<Subscription> getFilteredSubscriptionsByUsername(String buyerUsername);
 
     // Fitur 4
-    public Subscription approveSubscription(String uniqueCode);
-    public Subscription rejectSubscription(String uniqueCode);
-    public Subscription setSubscriptionPending(String uniqueCode);
+//    public Subscription approveSubscription(String uniqueCode);
+//    public Subscription rejectSubscription(String uniqueCode);
+//    public Subscription setSubscriptionPending(String uniqueCode);
+    public Subscription setSubscriptionStatus(String uniqueCode, String status);
 
 }

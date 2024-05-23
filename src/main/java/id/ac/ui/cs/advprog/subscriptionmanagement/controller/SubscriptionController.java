@@ -42,9 +42,13 @@ public class SubscriptionController {
     }
 
     @PostMapping("/subscribe/{id}")
-    public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestBody Map<String, String> requestBody, @RequestHeader("Authorization") String token) {
         try {
+//            String buyerUsername = AuthMiddleware.getUsernameFromToken(token);
+//            String buyerRole = AuthMiddleware.getRoleFromToken(token);
+
             String username = requestBody.get("username");
+
             Subscription subscription = subscriptionService.createSubscription(id, username);
             return new ResponseEntity<>(subscription, HttpStatus.OK);
         } catch (Exception e) {
@@ -76,33 +80,5 @@ public class SubscriptionController {
         return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
     }
 
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Subscription> getSubscriptionById(@PathVariable UUID id) {
-//        Subscription subscription = subscriptionService.findById(id);
-//        if (subscription != null) {
-//            return ResponseEntity.ok(subscription);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<Subscription> createSubscription(@RequestBody Subscription subscription) {
-//        Subscription createdSubscription = subscriptionService.create(subscription);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(createdSubscription);
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Subscription> updateSubscription(@PathVariable Long id, @RequestBody Subscription subscription) {
-//        subscription.setId(id);
-//        Subscription updatedSubscription = subscriptionService.update(subscription);
-//        return ResponseEntity.ok(updatedSubscription);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteSubscription(@PathVariable UUID id) {
-//        subscriptionService.deleteSubscriptionById(id);
-//        return ResponseEntity.noContent().build();
-//    }
+//    @PostMapping("/set_status")
 }

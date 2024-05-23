@@ -22,4 +22,13 @@ public class Subscription {
 
     private Long subscriptionBoxId;
     private String username;
+
+    public Subscription() {
+
+    }
+    public Subscription(String username,  Long subscriptionBoxId, Long id) {
+        this.username=username;
+        this.subscriptionBoxId = subscriptionBoxId;
+        this.id = id;
+    }
 }
