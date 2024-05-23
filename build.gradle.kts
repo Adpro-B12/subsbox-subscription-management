@@ -22,18 +22,30 @@ repositories {
     mavenCentral()
 }
 
+extra["springCloudVersion"] = "2022.0.4"
+
 dependencies {
+    implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("javax.persistence:javax.persistence-api:2.2")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
+    //test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.h2database:h2")
 }
+
+//dependencyManagement {
+//    imports {
+//        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+//    }
+//}
 
 tasks.register<Test>("unitTest") {
     description = "Runs unit tests."
