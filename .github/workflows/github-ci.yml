@@ -4,9 +4,12 @@ on:
   push:
     branches:
       - main
+      - dev2
+
   pull_request:
     branches:
       - main
+
 
 jobs:
   build:
@@ -30,12 +33,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
+
       - name: Build with Gradle
         run: |
           ./gradlew assemble
-      # (Optional) Add steps for running tests and generating reports
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -74,10 +78,11 @@ jobs:
           ./gradlew jacocoTestReport
       # (Optional) Add steps for generating coverage report and other post-test tasks
       # Test
+
   publish:
     name: Publish Docker Image
     runs-on: ubuntu-latest
-    needs: test
+    needs: build
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -116,9 +121,21 @@ jobs:
 
       - name: update permission
         run: chmod 400 ssh-key.pem
+
+      - name: Create env file
+        run: |
+          cat << EOF > .env
+          REGISTRY_USER=${{ secrets.REGISTRY_USER }}
+          IMAGE_NAME=${{ secrets.IMAGE_NAME }}
+          IMAGE_TAG=${{ secrets.IMAGE_TAG }}
+          CONTAINER_NAME=${{ secrets.CONTAINER_NAME }}
+          EOF
+
       - name: Deploy to GCP
         run: |
+          scp -o StrictHostKeyChecking=no -i ssh-key.pem -r ./.env ./docker-compose.yml ./monitoring ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_STATIC_IP }}:~/
           ssh -o StrictHostKeyChecking=no -i ssh-key.pem ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_STATIC_IP }} "
-            sudo docker container rm -f ${{ secrets.CONTAINER_NAME }} || true &&
-            sudo docker image rm -f ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }} || true &&
-            sudo docker run --name ${{ secrets.CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }}"
+            sudo docker container stop ${{ secrets.CONTAINER_NAME }} || true;
+            sudo docker container rm -f ${{ secrets.CONTAINER_NAME }} || true;
+            sudo docker image rm -f ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }} || true;
+            sudo docker compose up -d"
