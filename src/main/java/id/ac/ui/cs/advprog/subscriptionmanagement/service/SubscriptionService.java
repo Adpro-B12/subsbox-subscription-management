@@ -15,6 +15,7 @@ public interface SubscriptionService {
     public List<SubscriptionBox> getAllBoxes();
     public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice);
     public List<SubscriptionBox> getFilteredBoxesByName(String name);
+    public SubscriptionBox findBoxById(Long id);
 
     // Fitur 2
     public Subscription createSubscription(Long BoxId, String buyerUsername);

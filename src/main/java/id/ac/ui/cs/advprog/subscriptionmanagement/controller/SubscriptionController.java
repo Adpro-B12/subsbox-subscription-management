@@ -26,6 +26,11 @@ public class SubscriptionController {
         return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SubscriptionBox> getSubscriptionBox(@PathVariable Long id) {
+        SubscriptionBox box = subscriptionService.findBoxById(id);
+        return box != null ? new ResponseEntity<>(box, HttpStatus.OK) : ResponseEntity.notFound().build();
+    }
     @GetMapping("/price")
     public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
             @RequestParam(required = false) int minPrice,
