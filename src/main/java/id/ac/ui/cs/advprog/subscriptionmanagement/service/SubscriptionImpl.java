@@ -1,15 +1,15 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.service;
 
+import id.ac.ui.cs.advprog.subscriptionmanagement.handler.ResourceNotFoundException;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Builder.SubscriptionBuilder;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
-import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionRepository;
 import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionBoxRepository;
+import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class SubscriptionImpl implements SubscriptionService {
@@ -34,6 +34,11 @@ public class SubscriptionImpl implements SubscriptionService {
     @Override
     public List<SubscriptionBox> getFilteredBoxesByName(String name) {
         return subscriptionBoxRepository.findByNameContaining(name);
+    }
+
+    @Override
+    public SubscriptionBox findBoxById(Long id) throws ResourceNotFoundException {
+        return subscriptionBoxRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Subscription box not found with id: " + id));
     }
 
     @Override
