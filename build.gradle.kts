@@ -48,8 +48,10 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
     //test
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 }
 
 //dependencyManagement {

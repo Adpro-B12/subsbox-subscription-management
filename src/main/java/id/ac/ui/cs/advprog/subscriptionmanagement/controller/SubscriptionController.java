@@ -47,19 +47,21 @@ public class SubscriptionController {
     }
 
     @PostMapping("/subscribe/{id}")
-    public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestBody Map<String, String> requestBody, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestHeader("Authorization") String token) {
         try {
 //            String buyerUsername = AuthMiddleware.getUsernameFromToken(token);
 //            String buyerRole = AuthMiddleware.getRoleFromToken(token);
 
-            String username = requestBody.get("username");
 
+            String username = "alifbintang";
             Subscription subscription = subscriptionService.createSubscription(id, username);
             return new ResponseEntity<>(subscription, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
+
+
 
     @PostMapping("/cancel")
     public ResponseEntity<Subscription> cancelSubscription(@RequestBody Map<String, String> requestBody) {
