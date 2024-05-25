@@ -47,11 +47,11 @@ public class SubscriptionController {
     }
 
     @PostMapping("/subscribe/{id}")
-    public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Subscription> subscribe(@PathVariable Long id) {
+//            , @RequestHeader("Authorization") String token) {
         try {
 //            String buyerUsername = AuthMiddleware.getUsernameFromToken(token);
 //            String buyerRole = AuthMiddleware.getRoleFromToken(token);
-
 
             String username = "alifbintang";
             Subscription subscription = subscriptionService.createSubscription(id, username);
@@ -88,4 +88,5 @@ public class SubscriptionController {
     }
 
 //    @PostMapping("/set_status")
+
 }
