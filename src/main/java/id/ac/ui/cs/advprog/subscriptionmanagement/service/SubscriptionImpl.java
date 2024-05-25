@@ -42,6 +42,11 @@ public class SubscriptionImpl implements SubscriptionService {
     }
 
     @Override
+    public Subscription findSubById(Long id) throws ResourceNotFoundException {
+        return subscriptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Subscription not found with id: " + id));
+    }
+
+    @Override
     public Subscription createSubscription(Long BoxId, String buyerUsername) {
 
         SubscriptionBox subscriptionBox = subscriptionBoxRepository.findById(BoxId).get();
@@ -55,9 +60,10 @@ public class SubscriptionImpl implements SubscriptionService {
     }
 
     @Override
-    public Subscription cancelSubscription(String uniqueCode) {
-        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
+    public Subscription cancelSubscription(Long subId) {
+        Subscription subscription = subscriptionRepository.findById(subId).get();
         subscription.setStatus("CANCELLED");
+        subscriptionRepository.save(subscription);
         return subscription;
     }
 

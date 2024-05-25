@@ -47,13 +47,11 @@ public class SubscriptionController {
     }
 
     @PostMapping("/subscribe/{id}")
-    public ResponseEntity<Subscription> subscribe(@PathVariable Long id) {
-//            , @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestBody Map<String, String> requestBody){
+//
         try {
-//            String buyerUsername = AuthMiddleware.getUsernameFromToken(token);
-//            String buyerRole = AuthMiddleware.getRoleFromToken(token);
 
-            String username = "alifbintang";
+            String username = requestBody.get("username");
             Subscription subscription = subscriptionService.createSubscription(id, username);
             return new ResponseEntity<>(subscription, HttpStatus.OK);
         } catch (Exception e) {
@@ -63,11 +61,10 @@ public class SubscriptionController {
 
 
 
-    @PostMapping("/cancel")
-    public ResponseEntity<Subscription> cancelSubscription(@RequestBody Map<String, String> requestBody) {
+    @PostMapping("/cancel/{subId}")
+    public ResponseEntity<Subscription> cancelSubscription(@PathVariable Long subId) {
         try {
-            String uniqueCode = requestBody.get("uniqueCode");
-            Subscription subscription = subscriptionService.cancelSubscription(uniqueCode);
+            Subscription subscription = subscriptionService.cancelSubscription(subId);
             return new ResponseEntity<>(subscription, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -76,8 +73,9 @@ public class SubscriptionController {
 
 
     @GetMapping("/subscriptions")
-    public ResponseEntity<List<Subscription>> getUserSubscriptions(@RequestParam String ownerUsername) {
-        List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByUsername(ownerUsername);
+    public ResponseEntity<List<Subscription>> getUserSubscriptions(@RequestBody Map<String, String> requestBody) {
+        String username = requestBody.get("username");
+        List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByUsername(username);
         return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
     }
 

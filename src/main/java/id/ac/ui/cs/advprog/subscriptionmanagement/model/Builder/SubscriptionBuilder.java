@@ -66,13 +66,13 @@ public class SubscriptionBuilder {
 //        SubscriptionBox subscriptionBox = optionalBox.get();
         String subscriptionBoxType = subscriptionBox.getType();
         String tempId = UUID.randomUUID().toString();
-        if (subscriptionBoxType.equals("MONTHLY")) {
+        if (subscriptionBoxType.equals("MTH")) {
             calendar.add(Calendar.MONTH, 1);
             currentSubscription.setUniqueCode("MTH"+'-'+tempId);
-        } else if (subscriptionBoxType.equals("QUARTERLY")) {
+        } else if (subscriptionBoxType.equals("QTR")) {
             calendar.add(Calendar.MONTH, 3);
             currentSubscription.setUniqueCode("QTR"+'-'+tempId);
-        } else if(subscriptionBoxType.equals("SEMIANNUAL")) {
+        } else if(subscriptionBoxType.equals("SAA")) {
             calendar.add(Calendar.MONTH, 6);
             currentSubscription.setUniqueCode("SAA"+'-'+tempId);
         }

@@ -16,10 +16,11 @@ public interface SubscriptionService {
     public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice);
     public List<SubscriptionBox> getFilteredBoxesByName(String name);
     public SubscriptionBox findBoxById(Long id);
+    public Subscription findSubById(Long id);
 
     // Fitur 2
     public Subscription createSubscription(Long BoxId, String buyerUsername);
-    public Subscription cancelSubscription(String uniqueCode);
+    public Subscription cancelSubscription(Long subId);
 
     // Fitur 3
     public List<Subscription> getFilteredSubscriptionsByStatus(String status);
