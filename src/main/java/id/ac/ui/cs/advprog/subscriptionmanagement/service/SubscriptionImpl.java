@@ -7,6 +7,9 @@ import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
 import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionBoxRepository;
 import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +30,9 @@ public class SubscriptionImpl implements SubscriptionService {
     }
 
     @Override
-    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
-        return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice);
+    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable) {
+        Page<SubscriptionBox> page = subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice, pageable);
+        return page.getContent();
     }
 
     @Override
