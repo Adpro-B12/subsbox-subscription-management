@@ -71,6 +71,11 @@ public class SubscriptionController {
         }
     }
 
+    @GetMapping("/allsubs")
+    public ResponseEntity<List<Subscription>> getAllSubscriptions() {
+        List<Subscription> subscriptions = subscriptionService.getAllSubscriptions();
+        return new ResponseEntity<>(subscriptions, HttpStatus.OK);
+    }
 
     @GetMapping("/subscriptions")
     public ResponseEntity<List<Subscription>> getUserSubscriptions(@RequestBody Map<String, String> requestBody) {
@@ -85,6 +90,15 @@ public class SubscriptionController {
         return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
     }
 
-//    @PostMapping("/set_status")
+    @PostMapping("/set_status/{subId}")
+    public ResponseEntity<Subscription> setSubscriptionStatus(@PathVariable Long subId, @RequestBody Map<String, String> requestBody) {
+        try {
+            String status = requestBody.get("status");
+            Subscription subscription = subscriptionService.setSubscriptionStatus(subId, status);
+            return new ResponseEntity<>(subscription, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 }

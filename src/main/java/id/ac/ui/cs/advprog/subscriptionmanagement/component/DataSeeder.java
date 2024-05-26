@@ -44,20 +44,20 @@ public class DataSeeder implements CommandLineRunner {
         subscriptionBoxRepository.save(box3);
 
         //
-        Subscription subscription1 = new Subscription("alifbintang1",  1L, 1L);
-        subscriptionRepository.save(subscription1);
-
-        //
-        Subscription subscription2 = new Subscription("alifbintang1",  1L, 2L);
-        subscriptionRepository.save(subscription2);
-
-        //
-        Subscription subscription3 = new Subscription("alifbintang1",  3L, 3L);
-        subscriptionRepository.save(subscription3);
-
-        //
-        Subscription subscription4 = new Subscription("akmalramadhan",  1L, 4L);
-        subscriptionRepository.save(subscription4);
+//        Subscription subscription1 = new Subscription("alifbintang1",  1L, 1L);
+//        subscriptionRepository.save(subscription1);
+//
+//        //
+//        Subscription subscription2 = new Subscription("alifbintang1",  1L, 2L);
+//        subscriptionRepository.save(subscription2);
+//
+//        //
+//        Subscription subscription3 = new Subscription("alifbintang1",  3L, 3L);
+//        subscriptionRepository.save(subscription3);
+//
+//        //
+//        Subscription subscription4 = new Subscription("akmalramadhan",  1L, 4L);
+//        subscriptionRepository.save(subscription4);
 
     }
 }

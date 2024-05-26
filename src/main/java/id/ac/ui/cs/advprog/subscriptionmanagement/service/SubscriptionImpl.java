@@ -25,6 +25,8 @@ public class SubscriptionImpl implements SubscriptionService {
     public List<SubscriptionBox> getAllBoxes() {
         return subscriptionBoxRepository.findAll();
     }
+    @Override
+    public List<Subscription> getAllSubscriptions() { return subscriptionRepository.findAll(); }
 
     @Override
     public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
@@ -79,44 +81,13 @@ public class SubscriptionImpl implements SubscriptionService {
     }
 
     @Override
-    public Subscription setSubscriptionStatus(String uniqueCode, String status) {
+    public Subscription setSubscriptionStatus(Long subId, String status) {
 
-        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-        if (subscription != null) {
-            subscription.setStatus(status);
-            subscriptionRepository.save(subscription);
-        }
+        Subscription subscription = subscriptionRepository.findById(subId).get();
+        subscription.setStatus(status);
+        subscriptionRepository.save(subscription);
+
         return subscription;
     }
-
-//    @Override
-//    public Subscription approveSubscription(String uniqueCode) {
-//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-//        if (subscription != null) {
-//            subscription.setStatus("Approved");
-//            subscriptionRepository.save(subscription);
-//        }
-//        return subscription;
-//    }
-//
-//    @Override
-//    public Subscription rejectSubscription(String uniqueCode) {
-//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-//        if (subscription != null) {
-//            subscription.setStatus("Rejected");
-//            subscriptionRepository.save(subscription);
-//        }
-//        return subscription;
-//    }
-//
-//    @Override
-//    public Subscription setSubscriptionPending(String uniqueCode) {
-//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-//        if (subscription != null) {
-//            subscription.setStatus("Pending");
-//            subscriptionRepository.save(subscription);
-//        }
-//        return subscription;
-//    }
 
 }
