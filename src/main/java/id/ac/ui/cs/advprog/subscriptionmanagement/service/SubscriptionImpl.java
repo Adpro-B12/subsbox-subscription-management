@@ -9,6 +9,10 @@ import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @Service
@@ -22,16 +26,22 @@ public class SubscriptionImpl implements SubscriptionService {
     private SubscriptionBuilder subscriptionBuilder;
 
     @Override
-    public List<SubscriptionBox> getAllBoxes() {
-        return subscriptionBoxRepository.findAll();
+    public Page<SubscriptionBox> getAllBoxes(Pageable pageable) {
+        return subscriptionBoxRepository.findAll(pageable);
     }
+//    public List<SubscriptionBox> getAllBoxes() {
+//        return subscriptionBoxRepository.findAll();
+//    }
     @Override
     public List<Subscription> getAllSubscriptions() { return subscriptionRepository.findAll(); }
 
     @Override
-    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
-        return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice);
+    public Page<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable) {
+        return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice, pageable);
     }
+//    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
+//        return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice);
+//    }
 
     @Override
     public List<SubscriptionBox> getFilteredBoxesByName(String name) {
