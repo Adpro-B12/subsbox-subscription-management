@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
@@ -89,12 +90,12 @@ class SubscriptionImplTest {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
         when(subscriptionBuilder.reset()).thenReturn(subscriptionBuilder);
         when(subscriptionBuilder.addIdBox(1L)).thenReturn(subscriptionBuilder);
-        when(subscriptionBuilder.addUniqueCode(box)).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.addUniqueCode("Monthly")).thenReturn(subscriptionBuilder); // Update to match the new method signature
         when(subscriptionBuilder.addBuyerUsername("testUser")).thenReturn(subscriptionBuilder);
         when(subscriptionBuilder.build()).thenReturn(subscription);
         when(subscriptionRepository.save(any(Subscription.class))).thenReturn(subscription);
 
-        Subscription result = subscriptionService.createSubscription(1L, "testUser");
+        Subscription result = subscriptionService.createSubscription(1L, "Monthly", "testUser"); // Update to match the new method signature
         assertEquals("testUser", result.getUsername());
     }
 

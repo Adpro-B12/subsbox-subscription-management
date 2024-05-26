@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class SubscriptionControllerTest {
@@ -89,26 +90,31 @@ class SubscriptionControllerTest {
     @Test
     void testSubscribe() {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
-        when(subscriptionService.createSubscription(1L, "testUser")).thenReturn(subscription);
+        when(subscriptionService.createSubscription(1L, "Monthly", "testUser")).thenReturn(subscription);
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("username", "testUser");
+        requestBody.put("type", "Monthly"); // Add type to the request body
 
         ResponseEntity<Subscription> response = subscriptionController.subscribe(1L, requestBody);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("testUser", response.getBody().getUsername());
+        assertEquals("testUser", response.getBody().getUsername()); // Ensure that the returned subscription is correct
     }
+
 
     @Test
     void testSubscribeBadRequest() {
-        when(subscriptionService.createSubscription(1L, "testUser")).thenThrow(new RuntimeException());
+        when(subscriptionService.createSubscription(1L, "Monthly", "testUser")).thenThrow(new RuntimeException());
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("username", "testUser");
+        requestBody.put("type", "Monthly"); // Add type to the request body
 
         ResponseEntity<Subscription> response = subscriptionController.subscribe(1L, requestBody);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody()); // Ensure that the response body is null for a bad request
     }
+
 
     @Test
     void testCancelSubscription() {
