@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Repository
 public interface SubscriptionBoxRepository extends JpaRepository<SubscriptionBox, Long>{
     Page<SubscriptionBox> findByPriceBetween(int minPrice, int maxPrice, Pageable pageable);

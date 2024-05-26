@@ -12,6 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @Service
@@ -32,12 +36,20 @@ public class SubscriptionImpl implements SubscriptionService {
     public Page<SubscriptionBox> getAllBoxes(Pageable pageable) {
         return subscriptionBoxRepository.findAll(pageable);
     }
+//    public List<SubscriptionBox> getAllBoxes() {
+//        return subscriptionBoxRepository.findAll();
+//    }
+    @Override
+    public List<Subscription> getAllSubscriptions() { return subscriptionRepository.findAll(); }
 
 
     @Override
     public Page<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable) {
         return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice, pageable);
     }
+//    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
+//        return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice);
+//    }
 
 //    @Override
 //    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
@@ -92,44 +104,13 @@ public class SubscriptionImpl implements SubscriptionService {
     }
 
     @Override
-    public Subscription setSubscriptionStatus(String uniqueCode, String status) {
+    public Subscription setSubscriptionStatus(Long subId, String status) {
 
-        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-        if (subscription != null) {
-            subscription.setStatus(status);
-            subscriptionRepository.save(subscription);
-        }
+        Subscription subscription = subscriptionRepository.findById(subId).get();
+        subscription.setStatus(status);
+        subscriptionRepository.save(subscription);
+
         return subscription;
     }
-
-//    @Override
-//    public Subscription approveSubscription(String uniqueCode) {
-//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-//        if (subscription != null) {
-//            subscription.setStatus("Approved");
-//            subscriptionRepository.save(subscription);
-//        }
-//        return subscription;
-//    }
-//
-//    @Override
-//    public Subscription rejectSubscription(String uniqueCode) {
-//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-//        if (subscription != null) {
-//            subscription.setStatus("Rejected");
-//            subscriptionRepository.save(subscription);
-//        }
-//        return subscription;
-//    }
-//
-//    @Override
-//    public Subscription setSubscriptionPending(String uniqueCode) {
-//        Subscription subscription = subscriptionRepository.findByUniqueCode(uniqueCode);
-//        if (subscription != null) {
-//            subscription.setStatus("Pending");
-//            subscriptionRepository.save(subscription);
-//        }
-//        return subscription;
-//    }
 
 }

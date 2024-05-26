@@ -37,6 +37,10 @@ public class SubscriptionController {
         Page<SubscriptionBox> boxesPage = subscriptionService.getAllBoxes(pageable);
         return new ResponseEntity<>(boxesPage, HttpStatus.OK);
     }
+//    public ResponseEntity<List<SubscriptionBox>> getAllSubscriptionBoxes() {
+//        List<SubscriptionBox> boxes = subscriptionService.getAllBoxes();
+//        return new ResponseEntity<>(boxes, HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<SubscriptionBox> getSubscriptionBox(@PathVariable Long id) {
@@ -49,11 +53,9 @@ public class SubscriptionController {
             @RequestParam(required = false) int minPrice,
             @RequestParam(required = false) int maxPrice,
             Pageable pageable) {
-        Page<SubscriptionBox> boxesPage = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice, pageable);
-        return new ResponseEntity<>(boxesPage, HttpStatus.OK);
+                Page<SubscriptionBox> boxesPage = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice, pageable);
+                return new ResponseEntity<>(boxesPage, HttpStatus.OK);
     }
-
-//    @GetMapping("/price")
 //    public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
 //            @RequestParam(required = false) int minPrice,
 //            @RequestParam(required = false) int maxPrice) {
@@ -93,6 +95,11 @@ public class SubscriptionController {
         }
     }
 
+    @GetMapping("/allsubs")
+    public ResponseEntity<List<Subscription>> getAllSubscriptions() {
+        List<Subscription> subscriptions = subscriptionService.getAllSubscriptions();
+        return new ResponseEntity<>(subscriptions, HttpStatus.OK);
+    }
 
     @GetMapping("/subscriptions")
     public ResponseEntity<List<Subscription>> getUserSubscriptions(@RequestBody Map<String, String> requestBody) {
@@ -107,6 +114,15 @@ public class SubscriptionController {
         return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
     }
 
-//    @PostMapping("/set_status")
+    @PostMapping("/set_status/{subId}")
+    public ResponseEntity<Subscription> setSubscriptionStatus(@PathVariable Long subId, @RequestBody Map<String, String> requestBody) {
+        try {
+            String status = requestBody.get("status");
+            Subscription subscription = subscriptionService.setSubscriptionStatus(subId, status);
+            return new ResponseEntity<>(subscription, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 }
