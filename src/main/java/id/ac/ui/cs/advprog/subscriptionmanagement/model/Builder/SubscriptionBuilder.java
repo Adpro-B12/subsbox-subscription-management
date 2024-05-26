@@ -50,21 +50,12 @@ public class SubscriptionBuilder {
         return this;
     }
 
-    public SubscriptionBuilder addUniqueCode(SubscriptionBox subscriptionBox) {
+    public SubscriptionBuilder addUniqueCode(String subscriptionBoxType) {
         Date startDate = new Date();
         currentSubscription.setStartDate(startDate);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
-//        Long idSubscriptionBox = currentSubscription.getSubscriptionBoxId();
-//        Optional<SubscriptionBox> optionalBox = subscriptionBoxRepository.findById(idSubscriptionBox);
-//
-//        if (!optionalBox.isPresent()) {
-//            throw new IllegalStateException("Subscription Box not found");
-//        }
-//
-//        SubscriptionBox subscriptionBox = optionalBox.get();
-        String subscriptionBoxType = subscriptionBox.getType();
         String tempId = UUID.randomUUID().toString();
         if (subscriptionBoxType.equals("MTH")) {
             calendar.add(Calendar.MONTH, 1);

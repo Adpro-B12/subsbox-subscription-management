@@ -54,10 +54,13 @@ public class SubscriptionController {
     }
 
     @PostMapping("/subscribe/{id}")
+
     public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestBody Map<String, String> requestBody){
         try {
             String username = requestBody.get("username");
-            Subscription subscription = subscriptionService.createSubscription(id, username);
+            String type = requestBody.get("type");
+
+            Subscription subscription = subscriptionService.createSubscription(id, type, username);
             return new ResponseEntity<>(subscription, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
