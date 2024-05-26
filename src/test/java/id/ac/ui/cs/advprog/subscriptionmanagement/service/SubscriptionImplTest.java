@@ -141,6 +141,41 @@ public class SubscriptionImplTest {
         assertEquals("APPROVED", result.getStatus());
     }
 
+    @Test
+    public void testGetAllSubscriptions() {
+        List<Subscription> subscriptions = List.of(new Subscription("testUser", 1L, 1L));
+        when(subscriptionRepository.findAll()).thenReturn(subscriptions);
+
+        List<Subscription> result = subscriptionService.getAllSubscriptions();
+
+        assertEquals(1, result.size());
+        assertEquals("testUser", result.get(0).getUsername());
+    }
+
+    @Test
+    public void testGetFilteredSubscriptionsByUsername() {
+        List<Subscription> subscriptions = List.of(new Subscription("testUser", 1L, 1L));
+        when(subscriptionRepository.findByUsername("testUser")).thenReturn(subscriptions);
+
+        List<Subscription> result = subscriptionService.getFilteredSubscriptionsByUsername("testUser");
+
+        assertEquals(1, result.size());
+        assertEquals("testUser", result.get(0).getUsername());
+    }
+
+    @Test
+    public void testGetFilteredSubscriptionsByStatus() {
+        List<Subscription> subscriptions = List.of(new Subscription("testUser", 1L, 1L));
+        when(subscriptionRepository.findByStatus("PENDING")).thenReturn(subscriptions);
+
+        List<Subscription> result = subscriptionService.getFilteredSubscriptionsByStatus("PENDING");
+
+        assertEquals(1, result.size());
+        assertEquals("testUser", result.get(0).getUsername());
+    }
+
+
+
 //    private ObjectMapper objectMapper = new ObjectMapper();
 
 //    @Test
