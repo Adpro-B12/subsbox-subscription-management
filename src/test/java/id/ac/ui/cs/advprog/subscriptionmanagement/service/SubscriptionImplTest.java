@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
 import id.ac.ui.cs.advprog.subscriptionmanagement.repository.*;
+import id.ac.ui.cs.advprog.subscriptionmanagement.handler.ResourceNotFoundException;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.Builder.SubscriptionBuilder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,6 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +35,7 @@ import java.util.Optional;
 
 public class SubscriptionImplTest {
 
-    private MockMvc mockMvc;
+//    private MockMvc mockMvc;
 
     @Mock
     private SubscriptionRepository subscriptionRepository;
@@ -44,10 +50,98 @@ public class SubscriptionImplTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    @Test
+    public void testGetAllBoxes() {
+        Pageable pageable = PageRequest.of(0, 10);
+        List<SubscriptionBox> boxes = List.of(new SubscriptionBox("Test Box", "Monthly", 100, 1L));
+        Page<SubscriptionBox> page = new PageImpl<>(boxes, pageable, boxes.size());
+        when(subscriptionBoxRepository.findAll(pageable)).thenReturn(page);
+
+        Page<SubscriptionBox> result = subscriptionService.getAllBoxes(pageable);
+        assertEquals(1, result.getTotalElements());
+        assertEquals("Test Box", result.getContent().get(0).getName());
+    }
+
+    @Test
+    public void testGetFilteredBoxesByPrice() {
+        Pageable pageable = PageRequest.of(0, 10);
+        List<SubscriptionBox> boxes = List.of(new SubscriptionBox("Box1", "Monthly", 50, 1L));
+        Page<SubscriptionBox> page = new PageImpl<>(boxes, pageable, boxes.size());
+        when(subscriptionBoxRepository.findByPriceBetween(40, 100, pageable)).thenReturn(page);
+
+        Page<SubscriptionBox> result = subscriptionService.getFilteredBoxesByPrice(40, 100, pageable);
+        assertEquals(1, result.getTotalElements());
+        assertEquals("Box1", result.getContent().get(0).getName());
+    }
+
+    @Test
+    public void testGetFilteredBoxesByName() {
+        List<SubscriptionBox> boxes = List.of(new SubscriptionBox("Test Box", "Monthly", 100, 1L));
+        when(subscriptionBoxRepository.findByNameContaining("Test")).thenReturn(boxes);
+
+        List<SubscriptionBox> result = subscriptionService.getFilteredBoxesByName("Test");
+        assertEquals(1, result.size());
+        assertEquals("Test Box", result.get(0).getName());
+    }
+
+    @Test
+    public void testFindBoxById() throws ResourceNotFoundException {
+        SubscriptionBox box = new SubscriptionBox("Test Box", "Monthly", 100, 1L);
+        when(subscriptionBoxRepository.findById(1L)).thenReturn(Optional.of(box));
+
+        SubscriptionBox result = subscriptionService.findBoxById(1L);
+        assertEquals("Test Box", result.getName());
+    }
+
+    @Test
+    public void testFindBoxByIdNotFound() {
+        when(subscriptionBoxRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> subscriptionService.findBoxById(1L));
+    }
+
+    @Test
+    public void testCreateSubscription() {
+        SubscriptionBox box = new SubscriptionBox("Test Box", "Monthly", 100, 1L);
+        when(subscriptionBoxRepository.findById(1L)).thenReturn(Optional.of(box));
+        Subscription subscription = new Subscription("testUser", 1L, 1L);
+        when(subscriptionBuilder.reset()).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.addIdBox(1L)).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.addUniqueCode(box)).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.addBuyerUsername("testUser")).thenReturn(subscriptionBuilder);
+        when(subscriptionBuilder.build()).thenReturn(subscription);
+        when(subscriptionRepository.save(any(Subscription.class))).thenReturn(subscription);
+
+        Subscription result = subscriptionService.createSubscription(1L, "testUser");
+        assertEquals("testUser", result.getUsername());
+    }
+
+    @Test
+    public void testCancelSubscription() {
+        Subscription subscription = new Subscription("testUser", 1L, 1L);
+        subscription.setStatus("PENDING");
+        when(subscriptionRepository.findById(1L)).thenReturn(Optional.of(subscription));
+        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
+
+        Subscription result = subscriptionService.cancelSubscription(1L);
+        assertEquals("CANCELLED", result.getStatus());
+    }
+
+    @Test
+    public void testSetSubscriptionStatus() {
+        Subscription subscription = new Subscription("testUser", 1L, 1L);
+        subscription.setStatus("PENDING");
+        when(subscriptionRepository.findById(1L)).thenReturn(Optional.of(subscription));
+        when(subscriptionRepository.save(subscription)).thenReturn(subscription);
+
+        Subscription result = subscriptionService.setSubscriptionStatus(1L, "APPROVED");
+        assertEquals("APPROVED", result.getStatus());
+    }
+
+//    private ObjectMapper objectMapper = new ObjectMapper();
 
 //    @Test
 //    public void testGetAllBoxesReturnsAllBoxes() {
