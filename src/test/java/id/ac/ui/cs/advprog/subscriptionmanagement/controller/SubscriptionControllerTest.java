@@ -8,16 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class SubscriptionControllerTest {
@@ -34,17 +31,17 @@ class SubscriptionControllerTest {
 
     @Test
     void testGetAllSubscriptionBoxes() {
-        Pageable pageable = PageRequest.of(0, 10);
         SubscriptionBox box1 = new SubscriptionBox("Box1", "Monthly", 50, 1L);
         SubscriptionBox box2 = new SubscriptionBox("Box2", "Quarterly", 100, 2L);
         List<SubscriptionBox> boxes = Arrays.asList(box1, box2);
-        Page<SubscriptionBox> page = new PageImpl<>(boxes, pageable, boxes.size());
 
-        when(subscriptionService.getAllBoxes(pageable)).thenReturn(page);
+        when(subscriptionService.getAllBoxes()).thenReturn(boxes);
 
-        ResponseEntity<Page<SubscriptionBox>> response = subscriptionController.getAllSubscriptionBoxes(0, 10);
+        ResponseEntity<List<SubscriptionBox>> response = subscriptionController.getAllSubscriptionBoxes();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, response.getBody().getTotalElements());
+        assertEquals(2, response.getBody().size());
+        assertEquals("Box1", response.getBody().get(0).getName());
+        assertEquals("Box2", response.getBody().get(1).getName());
     }
 
     @Test
@@ -67,15 +64,15 @@ class SubscriptionControllerTest {
 
     @Test
     void testGetFilteredSubscriptionBoxesByPrice() {
-        Pageable pageable = PageRequest.of(0, 10);
         SubscriptionBox box = new SubscriptionBox("Box1", "Monthly", 50, 1L);
-        Page<SubscriptionBox> page = new PageImpl<>(Collections.singletonList(box), pageable, 1);
+        List<SubscriptionBox> boxes = Collections.singletonList(box);
 
-        when(subscriptionService.getFilteredBoxesByPrice(40, 60, pageable)).thenReturn(page);
+        when(subscriptionService.getFilteredBoxesByPrice(40, 60)).thenReturn(boxes);
 
-        ResponseEntity<Page<SubscriptionBox>> response = subscriptionController.getFilteredSubscriptionBoxesByPrice(40, 60, pageable);
+        ResponseEntity<List<SubscriptionBox>> response = subscriptionController.getFilteredSubscriptionBoxesByPrice(40, 60);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1, response.getBody().getTotalElements());
+        assertEquals(1, response.getBody().size());
+        assertEquals("Box1", response.getBody().get(0).getName());
     }
 
     @Test
@@ -93,26 +90,31 @@ class SubscriptionControllerTest {
     @Test
     void testSubscribe() {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
-        when(subscriptionService.createSubscription(1L, "testUser")).thenReturn(subscription);
+        when(subscriptionService.createSubscription(1L, "Monthly", "testUser")).thenReturn(subscription);
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("username", "testUser");
+        requestBody.put("type", "Monthly"); // Add type to the request body
 
         ResponseEntity<Subscription> response = subscriptionController.subscribe(1L, requestBody);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("testUser", response.getBody().getUsername());
+        assertEquals("testUser", response.getBody().getUsername()); // Ensure that the returned subscription is correct
     }
+
 
     @Test
     void testSubscribeBadRequest() {
-        when(subscriptionService.createSubscription(1L, "testUser")).thenThrow(new RuntimeException());
+        when(subscriptionService.createSubscription(1L, "Monthly", "testUser")).thenThrow(new RuntimeException());
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("username", "testUser");
+        requestBody.put("type", "Monthly"); // Add type to the request body
 
         ResponseEntity<Subscription> response = subscriptionController.subscribe(1L, requestBody);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody()); // Ensure that the response body is null for a bad request
     }
+
 
     @Test
     void testCancelSubscription() {
@@ -195,6 +197,7 @@ class SubscriptionControllerTest {
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("status", "Approved");
+        requestBody.put("role", "ADMIN");
 
         ResponseEntity<Subscription> response = subscriptionController.setSubscriptionStatus(1L, requestBody);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -207,6 +210,7 @@ class SubscriptionControllerTest {
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("status", "Approved");
+        requestBody.put("role", "ADMIN");
 
         ResponseEntity<Subscription> response = subscriptionController.setSubscriptionStatus(1L, requestBody);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());

@@ -5,17 +5,14 @@ import id.ac.ui.cs.advprog.subscriptionmanagement.model.Subscription;
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
 import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionRepository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 import java.util.UUID;
 
 public interface SubscriptionService {
 
     // Fitur 1
-    public Page<SubscriptionBox> getAllBoxes(Pageable pageable);
-    public Page<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable);
+    public List<SubscriptionBox> getAllBoxes();
+    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice);
     public List<SubscriptionBox> getFilteredBoxesByName(String name);
     public SubscriptionBox findBoxById(Long id);
     public Subscription findSubById(Long id);
