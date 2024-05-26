@@ -50,13 +50,12 @@ public class SubscriptionBuilder {
         return this;
     }
 
-    public SubscriptionBuilder addUniqueCode(SubscriptionBox subscriptionBox) {
+    public SubscriptionBuilder addUniqueCode(String subscriptionBoxType) {
         Date startDate = new Date();
         currentSubscription.setStartDate(startDate);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
-        String subscriptionBoxType = subscriptionBox.getType();
         String tempId = UUID.randomUUID().toString();
         if (subscriptionBoxType.equals("MTH")) {
             calendar.add(Calendar.MONTH, 1);

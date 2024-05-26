@@ -52,12 +52,11 @@ public class SubscriptionImpl implements SubscriptionService {
     }
 
     @Override
-    public Subscription createSubscription(SubscriptionBox box, String buyerUsername) {
-        Long boxId = box.getId();
+    public Subscription createSubscription(Long boxId, String type, String buyerUsername) {
         subscriptionBuilder = new SubscriptionBuilder();
         Subscription newSubscription = subscriptionBuilder.reset()
                 .addIdBox(boxId)
-                .addUniqueCode(box)
+                .addUniqueCode(type)
                 .addBuyerUsername(buyerUsername)
                 .build();
         return subscriptionRepository.save(newSubscription);
