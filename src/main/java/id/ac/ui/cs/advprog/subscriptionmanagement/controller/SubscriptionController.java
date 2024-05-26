@@ -8,12 +8,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -23,6 +31,7 @@ public class SubscriptionController {
     private SubscriptionService subscriptionService;
 
     @GetMapping("/all")
+
     public ResponseEntity<Page<SubscriptionBox>> getAllSubscriptionBoxes(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -40,16 +49,20 @@ public class SubscriptionController {
     @GetMapping("/price")
     public ResponseEntity<Page<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
             @RequestParam(required = false) int minPrice,
+
             @RequestParam(required = false) int maxPrice,
             Pageable pageable) {
                 Page<SubscriptionBox> boxesPage = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice, pageable);
                 return new ResponseEntity<>(boxesPage, HttpStatus.OK);
+
     }
 
     @GetMapping("/name")
     public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByName(
             @RequestParam(required = false) String name) {
-        List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByName(name);
+        List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByName(name).stream()
+                .sorted(Comparator.comparing(SubscriptionBox::getId))
+                .collect(Collectors.toList());
         return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 
@@ -80,20 +93,26 @@ public class SubscriptionController {
 
     @GetMapping("/allsubs")
     public ResponseEntity<List<Subscription>> getAllSubscriptions() {
-        List<Subscription> subscriptions = subscriptionService.getAllSubscriptions();
+        List<Subscription> subscriptions = subscriptionService.getAllSubscriptions().stream()
+                .sorted(Comparator.comparing(Subscription::getId))
+                .collect(Collectors.toList());
         return new ResponseEntity<>(subscriptions, HttpStatus.OK);
     }
 
     @GetMapping("/subscriptions")
     public ResponseEntity<List<Subscription>> getUserSubscriptions(@RequestBody Map<String, String> requestBody) {
         String username = requestBody.get("username");
-        List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByUsername(username);
+        List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByUsername(username).stream()
+                .sorted(Comparator.comparing(Subscription::getId))
+                .collect(Collectors.toList());
         return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
     }
 
     @GetMapping("/subscriptions_by_status")
     public ResponseEntity<List<Subscription>> getSubscriptionByStatus(@RequestParam String status) {
-        List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByStatus(status);
+        List<Subscription> subscriptions = subscriptionService.getFilteredSubscriptionsByStatus(status).stream()
+                .sorted(Comparator.comparing(Subscription::getId))
+                .collect(Collectors.toList());
         return subscriptions.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(subscriptions);
     }
 
@@ -101,6 +120,10 @@ public class SubscriptionController {
     public ResponseEntity<Subscription> setSubscriptionStatus(@PathVariable Long subId, @RequestBody Map<String, String> requestBody) {
         try {
             String status = requestBody.get("status");
+            String role = requestBody.get("role");
+            if(!role.equals("ADMIN")) {
+                return ResponseEntity.badRequest().build();
+            }
             Subscription subscription = subscriptionService.setSubscriptionStatus(subId, status);
             return new ResponseEntity<>(subscription, HttpStatus.OK);
         } catch (Exception e) {
