@@ -8,20 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
-import java.util.Map;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -31,13 +21,11 @@ public class SubscriptionController {
     private SubscriptionService subscriptionService;
 
     @GetMapping("/all")
-
-    public ResponseEntity<Page<SubscriptionBox>> getAllSubscriptionBoxes(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<SubscriptionBox> boxesPage = subscriptionService.getAllBoxes(pageable);
-        return new ResponseEntity<>(boxesPage, HttpStatus.OK);
+    public ResponseEntity<List<SubscriptionBox>> getAllSubscriptionBoxes() {
+        List<SubscriptionBox> boxes = subscriptionService.getAllBoxes().stream()
+                .sorted(Comparator.comparing(SubscriptionBox::getId))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -47,14 +35,13 @@ public class SubscriptionController {
     }
 
     @GetMapping("/price")
-    public ResponseEntity<Page<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
+    public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
             @RequestParam(required = false) int minPrice,
-
-            @RequestParam(required = false) int maxPrice,
-            Pageable pageable) {
-                Page<SubscriptionBox> boxesPage = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice, pageable);
-                return new ResponseEntity<>(boxesPage, HttpStatus.OK);
-
+            @RequestParam(required = false) int maxPrice) {
+        List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice).stream()
+                .sorted(Comparator.comparing(SubscriptionBox::getId))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(boxes, HttpStatus.OK);
     }
 
     @GetMapping("/name")
@@ -68,9 +55,7 @@ public class SubscriptionController {
 
     @PostMapping("/subscribe/{id}")
     public ResponseEntity<Subscription> subscribe(@PathVariable Long id, @RequestBody Map<String, String> requestBody){
-
         try {
-
             String username = requestBody.get("username");
             Subscription subscription = subscriptionService.createSubscription(id, username);
             return new ResponseEntity<>(subscription, HttpStatus.OK);
@@ -78,8 +63,6 @@ public class SubscriptionController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-
 
     @PostMapping("/cancel/{subId}")
     public ResponseEntity<Subscription> cancelSubscription(@PathVariable Long subId) {
@@ -130,5 +113,4 @@ public class SubscriptionController {
             return ResponseEntity.badRequest().build();
         }
     }
-
 }

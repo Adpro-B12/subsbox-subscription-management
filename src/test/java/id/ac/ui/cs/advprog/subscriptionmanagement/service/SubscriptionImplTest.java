@@ -15,11 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -43,26 +38,22 @@ class SubscriptionImplTest {
 
     @Test
     void testGetAllBoxes() {
-        Pageable pageable = PageRequest.of(0, 10);
         List<SubscriptionBox> boxes = List.of(new SubscriptionBox("Test Box", "Monthly", 100, 1L));
-        Page<SubscriptionBox> page = new PageImpl<>(boxes, pageable, boxes.size());
-        when(subscriptionBoxRepository.findAll(pageable)).thenReturn(page);
+        when(subscriptionBoxRepository.findAll()).thenReturn(boxes);
 
-        Page<SubscriptionBox> result = subscriptionService.getAllBoxes(pageable);
-        assertEquals(1, result.getTotalElements());
-        assertEquals("Test Box", result.getContent().get(0).getName());
+        List<SubscriptionBox> result = subscriptionService.getAllBoxes();
+        assertEquals(1, result.size());
+        assertEquals("Test Box", result.get(0).getName());
     }
 
     @Test
     void testGetFilteredBoxesByPrice() {
-        Pageable pageable = PageRequest.of(0, 10);
         List<SubscriptionBox> boxes = List.of(new SubscriptionBox("Box1", "Monthly", 50, 1L));
-        Page<SubscriptionBox> page = new PageImpl<>(boxes, pageable, boxes.size());
-        when(subscriptionBoxRepository.findByPriceBetween(40, 100, pageable)).thenReturn(page);
+        when(subscriptionBoxRepository.findByPriceBetween(40, 100)).thenReturn(boxes);
 
-        Page<SubscriptionBox> result = subscriptionService.getFilteredBoxesByPrice(40, 100, pageable);
-        assertEquals(1, result.getTotalElements());
-        assertEquals("Box1", result.getContent().get(0).getName());
+        List<SubscriptionBox> result = subscriptionService.getFilteredBoxesByPrice(40, 100);
+        assertEquals(1, result.size());
+        assertEquals("Box1", result.get(0).getName());
     }
 
     @Test
