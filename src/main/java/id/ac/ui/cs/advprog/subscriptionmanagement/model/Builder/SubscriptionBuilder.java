@@ -56,14 +56,6 @@ public class SubscriptionBuilder {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
-//        Long idSubscriptionBox = currentSubscription.getSubscriptionBoxId();
-//        Optional<SubscriptionBox> optionalBox = subscriptionBoxRepository.findById(idSubscriptionBox);
-//
-//        if (!optionalBox.isPresent()) {
-//            throw new IllegalStateException("Subscription Box not found");
-//        }
-//
-//        SubscriptionBox subscriptionBox = optionalBox.get();
         String subscriptionBoxType = subscriptionBox.getType();
         String tempId = UUID.randomUUID().toString();
         if (subscriptionBoxType.equals("MTH")) {

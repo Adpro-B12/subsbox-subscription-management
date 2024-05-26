@@ -19,7 +19,7 @@ public interface SubscriptionService {
     public Subscription findSubById(Long id);
 
     // Fitur 2
-    public Subscription createSubscription(Long BoxId, String buyerUsername);
+    public Subscription createSubscription(SubscriptionBox box, String buyerUsername);
     public Subscription cancelSubscription(Long subId);
 
     // Fitur 3
