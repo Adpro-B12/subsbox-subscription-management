@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface SubscriptionBoxRepository extends JpaRepository<SubscriptionBox, Long>{
     Page<SubscriptionBox> findByPriceBetween(int minPrice, int maxPrice, Pageable pageable);
-    List<SubscriptionBox> findByPriceBetween(int minPrice, int maxPrice);
+//    List<SubscriptionBox> findByPriceBetween(int minPrice, int maxPrice);
     List<SubscriptionBox> findByNameContaining(String name);
 }

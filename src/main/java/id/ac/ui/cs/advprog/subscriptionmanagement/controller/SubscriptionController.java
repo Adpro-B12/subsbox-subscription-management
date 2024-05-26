@@ -24,10 +24,18 @@ public class SubscriptionController {
     @Autowired
     private SubscriptionService subscriptionService;
 
+//    @GetMapping("/all")
+//    public ResponseEntity<List<SubscriptionBox>> getAllSubscriptionBoxes() {
+//        List<SubscriptionBox> boxes = subscriptionService.getAllBoxes();
+//        return new ResponseEntity<>(boxes, HttpStatus.OK);
+//    }
     @GetMapping("/all")
-    public ResponseEntity<List<SubscriptionBox>> getAllSubscriptionBoxes() {
-        List<SubscriptionBox> boxes = subscriptionService.getAllBoxes();
-        return new ResponseEntity<>(boxes, HttpStatus.OK);
+    public ResponseEntity<Page<SubscriptionBox>> getAllSubscriptionBoxes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SubscriptionBox> boxesPage = subscriptionService.getAllBoxes(pageable);
+        return new ResponseEntity<>(boxesPage, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -35,17 +43,23 @@ public class SubscriptionController {
         SubscriptionBox box = subscriptionService.findBoxById(id);
         return box != null ? new ResponseEntity<>(box, HttpStatus.OK) : ResponseEntity.notFound().build();
     }
+
     @GetMapping("/price")
-    public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
+    public ResponseEntity<Page<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
             @RequestParam(required = false) int minPrice,
             @RequestParam(required = false) int maxPrice,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
-        List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice, pageable);
-        return new ResponseEntity<>(boxes, HttpStatus.OK);
+            Pageable pageable) {
+        Page<SubscriptionBox> boxesPage = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice, pageable);
+        return new ResponseEntity<>(boxesPage, HttpStatus.OK);
     }
+
+//    @GetMapping("/price")
+//    public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
+//            @RequestParam(required = false) int minPrice,
+//            @RequestParam(required = false) int maxPrice) {
+//        List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice);
+//        return new ResponseEntity<>(boxes, HttpStatus.OK);
+//    }
 
     @GetMapping("/name")
     public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByName(

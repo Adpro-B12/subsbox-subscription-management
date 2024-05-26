@@ -24,16 +24,25 @@ public class SubscriptionImpl implements SubscriptionService {
     @Autowired
     private SubscriptionBuilder subscriptionBuilder;
 
+//    @Override
+//    public List<SubscriptionBox> getAllBoxes() {
+//        return subscriptionBoxRepository.findAll();
+//    }
     @Override
-    public List<SubscriptionBox> getAllBoxes() {
-        return subscriptionBoxRepository.findAll();
+    public Page<SubscriptionBox> getAllBoxes(Pageable pageable) {
+        return subscriptionBoxRepository.findAll(pageable);
     }
 
+
     @Override
-    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable) {
-        Page<SubscriptionBox> page = subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice, pageable);
-        return page.getContent();
+    public Page<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable) {
+        return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice, pageable);
     }
+
+//    @Override
+//    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice) {
+//        return subscriptionBoxRepository.findByPriceBetween(minPrice, maxPrice);
+//    }
 
     @Override
     public List<SubscriptionBox> getFilteredBoxesByName(String name) {

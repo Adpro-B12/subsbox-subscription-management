@@ -14,8 +14,12 @@ public interface SubscriptionService {
 //    public Subscription create(Subscription Subscription);
 
     // Fitur 1
-    public List<SubscriptionBox> getAllBoxes();
-    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable);
+//    public List<SubscriptionBox> getAllBoxes();
+//    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice);
+    // Updated methods with pagination support
+    public Page<SubscriptionBox> getAllBoxes(Pageable pageable);
+    public Page<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable);
+//    public List<SubscriptionBox> getFilteredBoxesByPrice(int minPrice, int maxPrice, Pageable pageable);
     public List<SubscriptionBox> getFilteredBoxesByName(String name);
     public SubscriptionBox findBoxById(Long id);
     public Subscription findSubById(Long id);
