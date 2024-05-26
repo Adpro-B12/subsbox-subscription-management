@@ -18,10 +18,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class SubscriptionControllerTest {
+class SubscriptionControllerTest {
     @Mock
     private SubscriptionService subscriptionService;
 
@@ -34,7 +33,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetAllSubscriptionBoxes() {
+    void testGetAllSubscriptionBoxes() {
         Pageable pageable = PageRequest.of(0, 10);
         SubscriptionBox box1 = new SubscriptionBox("Box1", "Monthly", 50, 1L);
         SubscriptionBox box2 = new SubscriptionBox("Box2", "Quarterly", 100, 2L);
@@ -49,7 +48,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetSubscriptionBox() {
+    void testGetSubscriptionBox() {
         SubscriptionBox box = new SubscriptionBox("Box1", "Monthly", 50, 1L);
         when(subscriptionService.findBoxById(1L)).thenReturn(box);
 
@@ -59,7 +58,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetSubscriptionBoxNotFound() {
+    void testGetSubscriptionBoxNotFound() {
         when(subscriptionService.findBoxById(1L)).thenReturn(null);
 
         ResponseEntity<SubscriptionBox> response = subscriptionController.getSubscriptionBox(1L);
@@ -67,7 +66,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetFilteredSubscriptionBoxesByPrice() {
+    void testGetFilteredSubscriptionBoxesByPrice() {
         Pageable pageable = PageRequest.of(0, 10);
         SubscriptionBox box = new SubscriptionBox("Box1", "Monthly", 50, 1L);
         Page<SubscriptionBox> page = new PageImpl<>(Collections.singletonList(box), pageable, 1);
@@ -80,7 +79,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetFilteredSubscriptionBoxesByName() {
+    void testGetFilteredSubscriptionBoxesByName() {
         SubscriptionBox box = new SubscriptionBox("Box1", "Monthly", 50, 1L);
         List<SubscriptionBox> boxes = Collections.singletonList(box);
 
@@ -92,7 +91,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testSubscribe() {
+    void testSubscribe() {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
         when(subscriptionService.createSubscription(1L, "testUser")).thenReturn(subscription);
 
@@ -105,7 +104,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testSubscribeBadRequest() {
+    void testSubscribeBadRequest() {
         when(subscriptionService.createSubscription(1L, "testUser")).thenThrow(new RuntimeException());
 
         Map<String, String> requestBody = new HashMap<>();
@@ -116,7 +115,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testCancelSubscription() {
+    void testCancelSubscription() {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
         when(subscriptionService.cancelSubscription(1L)).thenReturn(subscription);
 
@@ -126,7 +125,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testCancelSubscriptionBadRequest() {
+    void testCancelSubscriptionBadRequest() {
         when(subscriptionService.cancelSubscription(1L)).thenThrow(new RuntimeException());
 
         ResponseEntity<Subscription> response = subscriptionController.cancelSubscription(1L);
@@ -134,7 +133,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetAllSubscriptions() {
+    void testGetAllSubscriptions() {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
         List<Subscription> subscriptions = Collections.singletonList(subscription);
         when(subscriptionService.getAllSubscriptions()).thenReturn(subscriptions);
@@ -145,7 +144,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetUserSubscriptions() {
+    void testGetUserSubscriptions() {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
         List<Subscription> subscriptions = Collections.singletonList(subscription);
         when(subscriptionService.getFilteredSubscriptionsByUsername("testUser")).thenReturn(subscriptions);
@@ -159,7 +158,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetUserSubscriptionsNoContent() {
+    void testGetUserSubscriptionsNoContent() {
         when(subscriptionService.getFilteredSubscriptionsByUsername("testUser")).thenReturn(Collections.emptyList());
 
         Map<String, String> requestBody = new HashMap<>();
@@ -170,7 +169,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetSubscriptionByStatus() {
+    void testGetSubscriptionByStatus() {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
         List<Subscription> subscriptions = Collections.singletonList(subscription);
         when(subscriptionService.getFilteredSubscriptionsByStatus("Subscribed")).thenReturn(subscriptions);
@@ -181,7 +180,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testGetSubscriptionByStatusNoContent() {
+    void testGetSubscriptionByStatusNoContent() {
         when(subscriptionService.getFilteredSubscriptionsByStatus("Subscribed")).thenReturn(Collections.emptyList());
 
         ResponseEntity<List<Subscription>> response = subscriptionController.getSubscriptionByStatus("Subscribed");
@@ -189,7 +188,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testSetSubscriptionStatus() {
+    void testSetSubscriptionStatus() {
         Subscription subscription = new Subscription("testUser", 1L, 1L);
         subscription.setStatus("Approved");
         when(subscriptionService.setSubscriptionStatus(1L, "Approved")).thenReturn(subscription);
@@ -203,7 +202,7 @@ public class SubscriptionControllerTest {
     }
 
     @Test
-    public void testSetSubscriptionStatusBadRequest() {
+    void testSetSubscriptionStatusBadRequest() {
         when(subscriptionService.setSubscriptionStatus(1L, "Approved")).thenThrow(new RuntimeException());
 
         Map<String, String> requestBody = new HashMap<>();

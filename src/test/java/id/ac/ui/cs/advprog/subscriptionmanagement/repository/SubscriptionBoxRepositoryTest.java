@@ -7,17 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 import id.ac.ui.cs.advprog.subscriptionmanagement.model.SubscriptionBox;
-import id.ac.ui.cs.advprog.subscriptionmanagement.repository.SubscriptionBoxRepository;
 
 @DataJpaTest
-public class SubscriptionBoxRepositoryTest {
+class SubscriptionBoxRepositoryTest {
 
     @Autowired
     private SubscriptionBoxRepository repository;
@@ -29,11 +27,10 @@ public class SubscriptionBoxRepositoryTest {
         SubscriptionBox box2 = new SubscriptionBox("Box2", "Quarterly", 150, 2L);
         repository.save(box1);
         repository.save(box2);
-//        subscriptionBoxRepository = new SubscriptionBoxRepository();
     }
 
     @Test
-    public void testFindByPriceBetween() {
+    void testFindByPriceBetween() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<SubscriptionBox> result = repository.findByPriceBetween(40, 100, pageable);
         assertEquals(1, result.getTotalElements());
@@ -41,7 +38,7 @@ public class SubscriptionBoxRepositoryTest {
     }
 
     @Test
-    public void testFindByNameContaining() {
+    void testFindByNameContaining() {
         List<SubscriptionBox> result = repository.findByNameContaining("Box");
         assertEquals(2, result.size());
 

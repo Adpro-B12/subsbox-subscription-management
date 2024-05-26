@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-public class SubscriptionRepositoryTest {
+class SubscriptionRepositoryTest {
     @Autowired
     private SubscriptionRepository repository;
 
@@ -25,21 +25,21 @@ public class SubscriptionRepositoryTest {
     }
 
     @Test
-    public void testFindByUniqueCode() {
+    void testFindByUniqueCode() {
         Subscription result = repository.findByUniqueCode("MTH-12345");
         assertNotNull(result);
         assertEquals("testUser", result.getUsername());
     }
 
     @Test
-    public void testFindByUsername() {
+    void testFindByUsername() {
         List<Subscription> result = repository.findByUsername("testUser");
         assertEquals(1, result.size());
         assertEquals("testUser", result.get(0).getUsername());
     }
 
     @Test
-    public void testFindByStatus() {
+    void testFindByStatus() {
         List<Subscription> result = repository.findByStatus("PENDING");
         assertEquals(1, result.size());
         assertEquals("PENDING", result.get(0).getStatus());

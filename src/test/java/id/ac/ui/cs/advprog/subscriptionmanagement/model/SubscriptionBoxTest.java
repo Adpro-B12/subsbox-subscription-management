@@ -7,9 +7,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SubscriptionBoxTest {
+class SubscriptionBoxTest {
     @Test
-    public void testSubscriptionBoxDefaultConstructor() {
+    void testSubscriptionBoxDefaultConstructor() {
         SubscriptionBox box = new SubscriptionBox();
         assertNull(box.getName());
         assertNull(box.getType());
@@ -18,7 +18,7 @@ public class SubscriptionBoxTest {
     }
 
     @Test
-    public void testSubscriptionBoxParameterizedConstructor() {
+    void testSubscriptionBoxParameterizedConstructor() {
         SubscriptionBox box = new SubscriptionBox("Test Box", "Monthly", 100, 1L);
         assertEquals("Test Box", box.getName());
         assertEquals("Monthly", box.getType());
@@ -27,7 +27,7 @@ public class SubscriptionBoxTest {
     }
 
     @Test
-    public void testSubscriptionBoxSettersAndGetters() {
+    void testSubscriptionBoxSettersAndGetters() {
         SubscriptionBox box = new SubscriptionBox();
         box.setName("Test Box");
         box.setType("Monthly");
