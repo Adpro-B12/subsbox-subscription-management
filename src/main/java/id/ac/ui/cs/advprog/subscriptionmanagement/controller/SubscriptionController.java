@@ -17,8 +17,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
 
+    private final SubscriptionService subscriptionService;
+
     @Autowired
-    private SubscriptionService subscriptionService;
+    public SubscriptionController(SubscriptionService subscriptionService) {
+        this.subscriptionService = subscriptionService;
+    }
 
     @GetMapping("/all")
     public ResponseEntity<List<SubscriptionBox>> getAllSubscriptionBoxes() {
@@ -36,8 +40,8 @@ public class SubscriptionController {
 
     @GetMapping("/price")
     public ResponseEntity<List<SubscriptionBox>> getFilteredSubscriptionBoxesByPrice(
-            @RequestParam(required = false) int minPrice,
-            @RequestParam(required = false) int maxPrice) {
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice) {
         List<SubscriptionBox> boxes = subscriptionService.getFilteredBoxesByPrice(minPrice, maxPrice).stream()
                 .sorted(Comparator.comparing(SubscriptionBox::getId))
                 .collect(Collectors.toList());

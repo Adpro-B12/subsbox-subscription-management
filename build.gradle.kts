@@ -43,16 +43,16 @@ dependencies {
 //    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     implementation("javax.persistence:javax.persistence-api:2.2")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
     //test
-    implementation("io.jsonwebtoken:jjwt:0.9.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2")
-    implementation("org.springframework.boot:spring-boot-starter-web")
 }
 
 //dependencyManagement {

@@ -1,15 +1,8 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.model;
 
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.Enum.SubscriptionRequestStatus;
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.Enum.SubscriptionStatus;
-import id.ac.ui.cs.advprog.subscriptionmanagement.model.Enum.SubscriptionType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 

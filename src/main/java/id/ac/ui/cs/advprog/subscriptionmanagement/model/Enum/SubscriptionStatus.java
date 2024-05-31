@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.subscriptionmanagement.model.Enum;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public enum SubscriptionStatus {

@@ -13,13 +13,16 @@ import java.util.List;
 
 @Service
 public class SubscriptionImpl implements SubscriptionService {
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
-    @Autowired
-    private SubscriptionBoxRepository subscriptionBoxRepository;
+    private final SubscriptionRepository subscriptionRepository;
+    private final SubscriptionBoxRepository subscriptionBoxRepository;
+    private SubscriptionBuilder subscriptionBuilder;
 
     @Autowired
-    private SubscriptionBuilder subscriptionBuilder;
+    public SubscriptionImpl(SubscriptionRepository subscriptionRepository, SubscriptionBoxRepository subscriptionBoxRepository, SubscriptionBuilder subscriptionBuilder) {
+        this.subscriptionRepository = subscriptionRepository;
+        this.subscriptionBoxRepository = subscriptionBoxRepository;
+        this.subscriptionBuilder = subscriptionBuilder;
+    }
 
     @Override
     public List<SubscriptionBox> getAllBoxes() { return subscriptionBoxRepository.findAll(); }

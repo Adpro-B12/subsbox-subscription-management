@@ -14,11 +14,14 @@ import java.util.Arrays;
 
 @Component
 public class DataSeeder implements CommandLineRunner {
-    @Autowired
-    private SubscriptionBoxRepository subscriptionBoxRepository;
+    private final SubscriptionBoxRepository subscriptionBoxRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    private SubscriptionRepository subscriptionRepository;
+    public DataSeeder(SubscriptionBoxRepository subscriptionBoxRepository, SubscriptionRepository subscriptionRepository) {
+        this.subscriptionBoxRepository = subscriptionBoxRepository;
+        this.subscriptionRepository = subscriptionRepository;
+    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -43,21 +46,7 @@ public class DataSeeder implements CommandLineRunner {
         box3.setItems(new ArrayList<>(Arrays.asList(item5, item6)));
         subscriptionBoxRepository.save(box3);
 
-        //
-//        Subscription subscription1 = new Subscription("alifbintang1",  1L, 1L);
-//        subscriptionRepository.save(subscription1);
-//
-//        //
-//        Subscription subscription2 = new Subscription("alifbintang1",  1L, 2L);
-//        subscriptionRepository.save(subscription2);
-//
-//        //
-//        Subscription subscription3 = new Subscription("alifbintang1",  3L, 3L);
-//        subscriptionRepository.save(subscription3);
-//
-//        //
-//        Subscription subscription4 = new Subscription("akmalramadhan",  1L, 4L);
-//        subscriptionRepository.save(subscription4);
+
 
     }
 }
